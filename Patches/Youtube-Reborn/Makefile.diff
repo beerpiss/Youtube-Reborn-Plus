@@ -1,0 +1,8 @@
+--- Youtube-Reborn/Makefile	2022-03-02 09:27:53.000000000 +0700
++++ Youtube-Reborn+Makefile/Makefile	2022-03-10 20:17:12.702660712 +0700
+@@ -1,4 +1,4 @@
+-TARGET := iphone:clang:14.4:14.0
++TARGET := iphone:clang:14.5:14.0
+ INSTALL_TARGET_PROCESSES = YouTube
+ GO_EASY_ON_ME = 1
+ 

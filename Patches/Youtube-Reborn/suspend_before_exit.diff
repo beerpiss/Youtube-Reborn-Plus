@@ -1,0 +1,25 @@
+diff -urN Youtube-Reborn/Controllers/RootOptionsController.h Youtube-Reborn+suspend/Controllers/RootOptionsController.h
+--- Youtube-Reborn/Controllers/RootOptionsController.h	2022-03-02 09:27:53.000000000 +0700
++++ Youtube-Reborn+suspend/Controllers/RootOptionsController.h	2022-03-10 20:12:05.505753884 +0700
+@@ -2,4 +2,8 @@
+ 
+ @interface RootOptionsController : UITableViewController
+ 
+-@end
+\ No newline at end of file
++@end
++
++@interface UIApplication ()
++- (void)suspend;
++@end
+diff -urN Youtube-Reborn/Controllers/RootOptionsController.m Youtube-Reborn+suspend/Controllers/RootOptionsController.m
+--- Youtube-Reborn/Controllers/RootOptionsController.m	2022-03-02 09:27:53.000000000 +0700
++++ Youtube-Reborn+suspend/Controllers/RootOptionsController.m	2022-03-10 20:12:41.688911651 +0700
+@@ -367,6 +367,7 @@
+ }
+ 
+ - (void)apply {
++    [[UIApplication sharedApplication] suspend];
+     exit(0); 
+ }
+ 
