@@ -17,4 +17,4 @@ obj
 Resources/*
 !Resources/.keep
 Tweaks/Youtube-Reborn/*
-Tweaks/Youtube-Reborn/.keep
+!Tweaks/Youtube-Reborn/.keep
