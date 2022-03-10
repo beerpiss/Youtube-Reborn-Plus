@@ -1,4 +1,4 @@
-# Youtube Reborn Jailed
+# Youtube Reborn Plus
 A mostly-perfect sideloadable YouTube app, using [Lillie's](https://github.com/lillieweeb001) YouTube Reborn v3. 
 
 # Tweaks
