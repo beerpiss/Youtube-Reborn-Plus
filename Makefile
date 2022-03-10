@@ -25,7 +25,8 @@ do-patch:
 				touch $$PATCHFILE.done; \
 			fi; \
 		done; \
-	done
+	done; \
+	cd $$ROOTDIR
 
 download-youtube-reborn:
 	ROOTDIR=$(shell pwd); \
