@@ -14,6 +14,7 @@ obj
 
 # End of https://www.toptal.com/developers/gitignore/api/theos-tweak
 
+.vscode
 Resources/*
 !Resources/.keep
 Tweaks/Youtube-Reborn/*
