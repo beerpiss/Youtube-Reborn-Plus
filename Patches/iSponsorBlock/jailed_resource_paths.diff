@@ -22,7 +22,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+resourceB
      label.font = [UIFont boldSystemFontOfSize:48];
 diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+resourceBundle/iSponsorBlock.xm
 --- iSponsorBlock/iSponsorBlock.xm	2022-03-10 21:34:38.468104381 +0700
-+++ iSponsorBlock+resourceBundle/iSponsorBlock.xm	2022-03-10 21:51:09.535531496 +0700
++++ iSponsorBlock+resourceBundle/iSponsorBlock.xm	2022-03-10 22:12:46.157405580 +0700
 @@ -4,6 +4,11 @@
  #import "SponsorBlockRequest.h"
  #import "SponsorBlockViewController.h"
@@ -51,12 +51,15 @@ diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+resourceBundle/iSponsorBl
  
              if(topControls[0].superview == self){
                  [self addSubview:self.sponsorBlockButton];
-@@ -280,7 +285,7 @@
+@@ -278,9 +283,9 @@
+ }
+ %new
  -(void)sponsorStartedEndedButtonPressed:(YTQTMButton *)sender {
-     if(self.playerViewController.userSkipSegments.lastObject.endTime != -1) {
+-    if(self.playerViewController.userSkipSegments.lastObject.endTime != -1) {
++    if (self.playerViewController.userSkipSegments.lastObject.endTime != -1) {
          [self.playerViewController.userSkipSegments addObject:[[SponsorSegment alloc] initWithStartTime:self.playerViewController.currentVideoMediaTime endTime:-1 category:nil UUID:nil]];
 -       [self.sponsorStartedEndedButton setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Library/Application Support/iSponsorBlock/sponsorblockend-20@2x.png"] forState:UIControlStateNormal];
-+       [self.sponsorStartedEndedButton setImage:[UIImage imageWithContentsOfFile:SBEndPath] forState:UIControlStateNormal];
++        [self.sponsorStartedEndedButton setImage:[UIImage imageWithContentsOfFile:SBEndPath] forState:UIControlStateNormal];
      }
      else {
          self.playerViewController.userSkipSegments.lastObject.endTime = self.playerViewController.currentVideoMediaTime;
