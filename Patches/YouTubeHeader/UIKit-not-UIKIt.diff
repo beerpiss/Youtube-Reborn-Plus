@@ -1,0 +1,11 @@
+diff -urN YouTubeHeader YouTubeHeader+patch
+--- YouTubeHeader/YTSettingsViewController.h
++++ YouTubeHeader+patch/YTSettingsViewController.h
+@@ -1,4 +1,4 @@
+-#import <UIKit/UIKIt.h>
++#import <UIKit/UIKit.h>
+ 
+ @interface YTSettingsViewController : UIViewController
+-@end
+\ No newline at end of file
++@end
