@@ -68,7 +68,7 @@ diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+jailed/iSponsorBlock.xm
 +
 +//Bundle
 +%ctor {
-+NSString *resourcesBundlePath = [[NSBundle mainBundle] pathForResource:@"iSponsorBlock" ofType:@"bundle"];
++    NSString *resourcesBundlePath = [[NSBundle mainBundle] pathForResource:@"iSponsorBlock" ofType:@"bundle"];
 +    if (resourcesBundlePath) {
 +        NSBundle *resourcesBundle = [NSBundle bundleWithPath:resourcesBundlePath];
 +        PlayerInfoIconSponsorBlockerPath = [resourcesBundle pathForResource:@"PlayerInfoIconSponsorBlocker256px-20@2x" ofType:@"png"];
