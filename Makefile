@@ -17,7 +17,7 @@ $(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponso
 
 do-patch:
 	ROOTDIR=$(shell pwd); \
-	cd Patches; \
+	pushd Patches; \
 	for dir in *; do \
 		for PATCHFILE in $$dir/*; do \
 			if [ ! -f $$PATCHFILE.done ]; then \
@@ -26,7 +26,7 @@ do-patch:
 			fi; \
 		done; \
 	done; \
-	cd $$ROOTDIR
+	popd
 
 download-youtube-reborn:
 	ROOTDIR=$(shell pwd); \
