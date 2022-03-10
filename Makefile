@@ -16,11 +16,12 @@ $(TWEAK_NAME)_IPA = /Users/beerpsi/Downloads/YouTube_17.06.3_Qn_.ipa
 $(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib
 
 do-patch:
+	ROOTDIR=$(shell pwd); \
 	cd Patches; \
 	for dir in *; do \
 		for PATCHFILE in $$dir/*; do \
 			if [ ! -f $$PATCHFILE.done ]; then \
-				patch -sN -d Tweaks/$$dir -p1 < $$PATCHFILE; \
+				patch -sN -d $$ROOTDIR/Tweaks/$$dir -p1 < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
 			fi; \
 		done; \
