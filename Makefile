@@ -27,6 +27,15 @@ do-patch:
 		done; \
 	done
 
+download-youtube-reborn:
+	ROOTDIR=$(shell pwd); \
+	TEMPDIR=$(shell mktemp -d); \
+	cd $$TEMPDIR; \
+	wget -q -nc -OiOS-Tweaks.tar.gz https://github.com/LillieWeeb001/iOS-Tweaks/archive/main.tar.gz; \
+	tar -xzf iOS-Tweaks.tar.gz; \
+	cp -a iOS-Tweaks-main/YouTube\ Reborn/. $$ROOTDIR/Tweaks/Youtube-Reborn; \
+	cd $$ROOTDIR; \
+	rm -rf $$TEMPDIR
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
