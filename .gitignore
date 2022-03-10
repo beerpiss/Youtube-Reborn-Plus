@@ -18,3 +18,4 @@ Resources/*
 !Resources/.keep
 Tweaks/Youtube-Reborn/*
 !Tweaks/Youtube-Reborn/.keep
+*.done
