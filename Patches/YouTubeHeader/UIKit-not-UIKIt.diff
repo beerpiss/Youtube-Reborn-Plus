@@ -1,6 +1,6 @@
-diff -urN YouTubeHeader YouTubeHeader+patch
---- YouTubeHeader/YTSettingsViewController.h
-+++ YouTubeHeader+patch/YTSettingsViewController.h
+diff -urN YouTubeHeader/YTSettingsViewController.h YouTubeHeader+fix/YTSettingsViewController.h
+--- YouTubeHeader/YTSettingsViewController.h	2022-03-10 18:37:59.970065076 +0700
++++ YouTubeHeader+fix/YTSettingsViewController.h	2022-03-10 18:38:36.902865600 +0700
 @@ -1,4 +1,4 @@
 -#import <UIKit/UIKIt.h>
 +#import <UIKit/UIKit.h>

@@ -1,19 +1,18 @@
 diff -urN Alderis/Alderis/Assets.swift Alderis+jailed/Alderis/Assets.swift
---- Alderis/Alderis/Assets.swift	2022-03-10 17:01:22.310624523 +0700
-+++ Alderis+jailed/Alderis/Assets.swift	2022-03-10 17:00:52.419474596 +0700
-@@ -52,10 +52,12 @@
+--- Alderis/Alderis/Assets.swift	2022-03-10 18:20:42.681562128 +0700
++++ Alderis+jailed/Alderis/Assets.swift	2022-03-10 18:23:18.473256568 +0700
+@@ -52,9 +52,11 @@
  		let font = UIFont.monospacedDigitSystemFont(ofSize: size, weight: .regular)
  		let fontDescriptor = font.fontDescriptor.addingAttributes([
  			.featureSettings: [
 -					UIFontDescriptor.FeatureKey.selector: kStylisticAltSixOnSelector,
 -					UIFontDescriptor.FeatureKey.type: kStylisticAlternativesType
 -			]
--		])
-+					[
-+ 					.featureIdentifier: kStylisticAlternativesType,
-+ 					.typeIdentifier: kStylisticAltSixOnSelector
-+ 				]
-+ 			] as [[UIFontDescriptor.FeatureKey: Int]]
-+ 		])
++                            [
++                                .featureIdentifier: kStylisticAlternativesType,
++                                .typeIdentifier: kStylisticAltSixOnSelector
++                            ]
++			] as [[UIFontDescriptor.FeatureKey: Int]]
+ 		])
  		return UIFont(descriptor: fontDescriptor, size: 0)
  	}

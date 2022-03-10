@@ -1,9 +1,9 @@
-diff -urN Alderis/lcpshim/Makefile Alderis+jailed/lcpshim/Makefile
---- Alderis/lcpshim/Makefile	2022-03-10 17:01:22.657055123 +0700
-+++ Alderis+jailed/lcpshim/Makefile	2022-03-10 17:00:52.791187189 +0700
+--- Alderis/lcpshim/Makefile	2022-03-10 18:20:43.059992286 +0700
++++ Alderis+jailed/lcpshim/Makefile	2022-03-10 18:24:53.811571751 +0700
 @@ -1,8 +1,13 @@
 +TARGET = iphone:clang:14.5:13.0
 +ARCHS = arm64 arm64e
++
  include $(THEOS)/makefiles/common.mk
  
  LIBRARY_NAME = libcolorpicker
