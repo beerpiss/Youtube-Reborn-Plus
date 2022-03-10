@@ -12,4 +12,4 @@ A mostly-perfect sideloadable YouTube app, using [Lillie's](https://github.com/l
 - [YTSystemAppearance](https://poomsmart.github.io/repo/depictions/ytsystemappearance.html)
 
 # Download
-Lillie provides official builds (including IPAs) of YouTube Reborn on her Patreon. Consider supporting her [here](https://patreon.com/lillieweeb).
+Lillie provides official builds (including IPAs) of YouTube Reborn (without the extra tweaks) on her Patreon. Consider supporting her [here](https://patreon.com/lillieweeb).
