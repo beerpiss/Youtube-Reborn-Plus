@@ -12,7 +12,7 @@
 	url = https://github.com/PoomSmart/YouTubeHeader
 [submodule "Tweaks/Alderis"]
 	path = Tweaks/Alderis
-	url = https://github.com/qnblackcat/Alderis
+	url = https://github.com/hbang/Alderis
 [submodule "Tweaks/iSponsorBlock"]
 	path = Tweaks/iSponsorBlock
 	url = https://github.com/Galactic-Dev/iSponsorBlock
