@@ -21,7 +21,7 @@ do-patch:
 	for dir in *; do \
 		for PATCHFILE in $$dir/*; do \
 			if [ ! -f $$PATCHFILE.done ]; then \
-				patch -sN -d $$ROOTDIR/Tweaks/$$dir -p1 < $$PATCHFILE; \
+				patch -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
 			fi; \
 		done; \
