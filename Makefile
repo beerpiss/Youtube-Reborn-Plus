@@ -45,7 +45,7 @@ download-youtube-reborn:
 	@printf "$$(tput setaf 4)==>$$(tput sgr0) \e[1mExtracting YouTube Reborn…\e[0m\n"; \
 	tar -xzf $(TEMPDIR)/iOS-Tweaks.tar.gz -C $(TEMPDIR); \
 	cp -a $(TEMPDIR)/iOS-Tweaks-main/YouTube\ Reborn/. $(ROOTDIR)/Tweaks/Youtube-Reborn; \
-	rm -rf $(TEMPDIR)
+	rm -rf $(TEMPDIR) $(ROOTDIR)/Patches/*.done
 
 
 MODULES = jailed
