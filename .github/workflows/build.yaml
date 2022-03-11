@@ -1,0 +1,49 @@
+name: 'Build IPA'
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      -
+        name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      -
+        name: Setup Theos
+        uses: beerpiss/theos-action@v1
+      - 
+        name: Setup theos-jailed
+        run: |
+          git clone --depth 1 --recursive https://github.com/kabiroberai/theos-jailed ${{ github.workspace }}/theos-jailed
+          pushd ${{ github.workspace }}/theos-jailed
+          ./install
+          popd
+      -
+        name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          cache: 'pip'
+      - 
+        name: Downloading decrypted YouTube IPA
+        run: |
+          pip install -U gdown
+          gdown ${{ secrets.DECRYPTED_YOUTUBE_IPA }} -O YouTube.ipa
+      - 
+        name: Pointing makefile to decrypted IPA
+        run: |
+          export YOUTUBE_IPA_FULLPATH="$(cd "$(dirname "YouTube.ipa")"; pwd -P)/$(basename "YouTube.ipa")"
+          perl -i.bak -p -e 's/\/path\/to\/ipa/$ENV{YOUTUBE_IPA_FULLPATH}/g' Makefile
+      - 
+        name: Build
+        run: |
+          gmake download-youtube-reborn
+          gmake do-patch
+          gmake package FINALPACKAGE=1 2>&1 | grep -Ev 'getcwd|descriptor'
