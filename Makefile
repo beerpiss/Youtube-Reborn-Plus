@@ -73,16 +73,16 @@ SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Youtube-
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
-	@printf "$(tput setaf 2)==>$(tput sgr0) \e[1mCopying resources bundles…\e[0m\n"
+	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mCopying resources bundles…\e[0m\n"
 	@mkdir -p Resources/Frameworks/Alderis.framework && find .theos/obj/install/Library/Frameworks/Alderis.framework -maxdepth 1 -type f -exec cp {} Resources/Frameworks/Alderis.framework/ \;
 	@cp -R Tweaks/iSponsorBlock/layout/var/mobile/Library/Application\ Support/iSponsorBlock Resources/iSponsorBlock.bundle
 	@cp -R Tweaks/YouPiP/layout/Library/Application\ Support/YouPiP.bundle Resources/
 
-	@printf "$(tput setaf 2)==>$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m\n"
+	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m\n"
 	@install_name_tool -change /usr/lib/libcolorpicker.dylib @rpath/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib
 	@install_name_tool -change /Library/Frameworks/Alderis.framework/Alderis @rpath/Alderis.framework/Alderis .theos/obj/libcolorpicker.dylib
 
 before-clean::
-	@printf "$(tput setaf 6)==>$(tput sgr0) \e[1mDeleting copied resources…\e[0m\n"
+	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mDeleting copied resources…\e[0m\n"
 	@find Resources -not -name '.keep' -delete
 	
