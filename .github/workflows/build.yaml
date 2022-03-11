@@ -26,15 +26,10 @@ jobs:
           pushd ${{ github.workspace }}/theos-jailed
           ./install
           popd
-      -
-        name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          cache: 'pip'
       - 
         name: Downloading decrypted YouTube IPA
         run: |
-          pip install -U gdown
+          python3 -m pip install -U gdown
           gdown ${{ secrets.DECRYPTED_YOUTUBE_IPA }} -O YouTube.ipa
       - 
         name: Pointing makefile to decrypted IPA
