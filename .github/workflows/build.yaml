@@ -37,6 +37,10 @@ jobs:
           export YOUTUBE_IPA_FULLPATH="$(cd "$(dirname "YouTube.ipa")"; pwd -P)/$(basename "YouTube.ipa")"
           perl -i.bak -p -e 's/\/path\/to\/ipa/$ENV{YOUTUBE_IPA_FULLPATH}/g' Makefile
       - 
+        name: Installing build dependencies
+        run: |
+          curl -L https://raw.githubusercontent.com/Muirey03/RemoteLog/master/RemoteLog.h -o $THEOS/include/RemoteLog.h
+      - 
         name: Build
         run: |
           gmake download-youtube-reborn
