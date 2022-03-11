@@ -39,7 +39,7 @@ download-youtube-reborn:
 	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mCleaning old YouTube Reborn…\e[0m\n"; \
 	find $(ROOTDIR)/Tweaks/Youtube-Reborn -not -name '.keep' -delete
 	
-	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mDownloading YouTube Reborn…\e[0m\n"
+	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mDownloading YouTube Reborn…\e[0m\n"; \
 	wget -q -nc -O$(TEMPDIR)/iOS-Tweaks.tar.gz https://github.com/LillieWeeb001/iOS-Tweaks/archive/main.tar.gz
 
 	@printf "$$(tput setaf 4)==>$$(tput sgr0) \e[1mExtracting YouTube Reborn…\e[0m\n"; \
