@@ -38,10 +38,10 @@ jobs:
 
           export YOUTUBE_IPA_FULLPATH="$(cd "$(dirname "YouTube.ipa")"; pwd -P)/$(basename "YouTube.ipa")"
           perl -i.bak -p -e 's/\/path\/to\/ipa/$ENV{YOUTUBE_IPA_FULLPATH}/g' Makefile
-          echo "TERM=xterm256-color" >> $GITHUB_ENV
       - 
         name: Build
         run: |
+          export TERM=xterm
           gmake download-youtube-reborn 2>&1 | grep -Ev 'getcwd|descriptor'
           gmake do-patch 2>&1 | grep -Ev 'getcwd|descriptor'
           gmake package FINALPACKAGE=1 2>&1 | grep -Ev 'getcwd|descriptor'
