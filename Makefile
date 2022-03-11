@@ -1,28 +1,27 @@
-MODULES = jailed
-export TARGET := iphone:clang:14.5:14.0
-export ARCHS = arm64
-export GO_EASY_ON_ME = 1
-export SIDELOADED = 1
-export FINALPACKAGE = 1
-
-TWEAK_NAME = YoutubeRebornPlus
-DISPLAY_NAME = YouTube Reborn
-BUNDLE_ID = com.google.ios.youtube
-CODESIGN_IPA = 0
-
-$(TWEAK_NAME)_USE_FLEX = 0
-$(TWEAK_NAME)_FILES = Tweak.xm
-$(TWEAK_NAME)_IPA = /path/to/ipa  # Change the path to your decrypted YouTube IPA file here.
-$(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib
-
+PATCH_DIR ?= Patches
 do-patch:
 	ROOTDIR=$(shell pwd); \
-	pushd Patches; \
+	pushd $(PATCH_DIR); \
 	for dir in *; do \
 		for PATCHFILE in $$dir/*; do \
 			if [ ! -f $$PATCHFILE.done ]; then \
 				patch -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
+			fi; \
+		done; \
+	done; \
+	popd
+
+dont-patch:
+	ROOTDIR=$(shell pwd); \
+	pushd $(PATCH_DIR); \
+	for dir in *; do \
+		set -- $$dir/*; \
+		eval "set -- $$(awk 'BEGIN {for (i = ARGV[1]; i; i--) printf " \"$${"i"}\""}' "$$#")"; \
+		for PATCHFILE in $$@; do \
+			if [ -f $$PATCHFILE.done ]; then \
+				patch -R -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
+				rm $$PATCHFILE.done; \
 			fi; \
 		done; \
 	done; \
@@ -38,6 +37,26 @@ download-youtube-reborn:
 	cp -a iOS-Tweaks-main/YouTube\ Reborn/. $$ROOTDIR/Tweaks/Youtube-Reborn; \
 	cd $$ROOTDIR; \
 	rm -rf $$TEMPDIR
+
+
+MODULES = jailed
+export TARGET := iphone:clang:14.5:14.0
+export ARCHS = arm64
+export GO_EASY_ON_ME = 1
+export SIDELOADED = 1
+export FINALPACKAGE ?= 1
+
+TWEAK_NAME = YoutubeRebornPlus
+DISPLAY_NAME ?= YouTube Reborn
+BUNDLE_ID ?= com.google.ios.youtube
+CODESIGN_IPA ?= 0
+
+$(TWEAK_NAME)_USE_FLEX = 0
+$(TWEAK_NAME)_FILES = Tweak.xm
+$(TWEAK_NAME)_CFLAGS = -fobjc-arc
+$(TWEAK_NAME)_FRAMEWORKS = UIKit Foundation
+$(TWEAK_NAME)_IPA ?= /path/to/ipa  # Change the path to your decrypted YouTube IPA file here.
+$(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
