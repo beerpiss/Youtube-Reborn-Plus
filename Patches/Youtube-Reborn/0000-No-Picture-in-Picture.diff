@@ -169,8 +169,12 @@ diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+NoPiP/Tweak.h
 +extern NSString *YTApiKey;
 diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 --- Youtube-Reborn/Tweak.xm	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-11 12:50:10.832062393 +0700
-@@ -4,7 +4,6 @@
++++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-11 12:57:59.137603044 +0700
+@@ -1,10 +1,10 @@
+ #import <Foundation/Foundation.h>
+ #import <UIKit/UIKit.h>
++#import <AVFoundation/AVFoundation.h>
+ #import <XCDYouTubeKit/XCDYouTubeKit.h>
  #import <AFNetworking/AFNetworking.h>
  #import <MediaRemote/MediaRemote.h>
  #import "Controllers/RootOptionsController.h"
@@ -178,7 +182,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
  #import "DTTJailbreakDetection/DTTJailbreakDetection.h"
  #import "Tweak.h"
  
-@@ -148,8 +147,6 @@
+@@ -148,8 +148,6 @@
  %end
  
  NSMutableArray *overlayButtons = [NSMutableArray array];
@@ -187,7 +191,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
  
  %hook YTMainAppControlsOverlayView
  
-@@ -163,9 +160,6 @@
+@@ -163,9 +161,6 @@
          if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHideRebornDWNButton"] == NO) {
              [overlayButtons addObject:@"DWN"];
          }
@@ -197,7 +201,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
          if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kHideRebornOPButton"] == NO) {
              [overlayButtons addObject:@"OP"];
          }
-@@ -175,9 +169,6 @@
+@@ -175,9 +170,6 @@
              if ([overlayButtons[0] isEqual:@"DWN"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
              }
@@ -207,7 +211,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
              if ([overlayButtons[0] isEqual:@"OP"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
              }
-@@ -199,18 +190,12 @@
+@@ -199,18 +191,12 @@
              if ([overlayButtons[0] isEqual:@"DWN"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
              }
@@ -226,7 +230,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
              if ([overlayButtons[1] isEqual:@"OP"]) {
                  [self.overlayButtonTwo addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
              }
-@@ -238,27 +223,18 @@
+@@ -238,27 +224,18 @@
              if ([overlayButtons[0] isEqual:@"DWN"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
              }
@@ -254,7 +258,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
              if ([overlayButtons[2] isEqual:@"OP"]) {
                  [self.overlayButtonThree addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
              }
-@@ -655,62 +631,6 @@
+@@ -655,62 +632,6 @@
          }
      }];
  }
@@ -317,7 +321,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
  %end
  
  %group gNoVideoAds
-@@ -1842,4 +1762,4 @@
+@@ -1842,4 +1763,4 @@
          }
          %init(_ungrouped);
      }
