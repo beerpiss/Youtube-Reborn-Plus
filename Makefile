@@ -85,4 +85,5 @@ before-package::
 before-clean::
 	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mDeleting copied resources…\e[0m\n"
 	@find Resources -not -name '.keep' -delete
-	
+
+.PHONY: do-patch undo-patch download-youtube-reborn
