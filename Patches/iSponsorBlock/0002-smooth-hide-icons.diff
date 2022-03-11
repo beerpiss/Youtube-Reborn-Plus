@@ -1,0 +1,49 @@
+diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+smoothHide/iSponsorBlock.xm
+--- iSponsorBlock/iSponsorBlock.xm	2022-03-11 11:14:00.755177095 +0700
++++ iSponsorBlock+smoothHide/iSponsorBlock.xm	2022-03-11 11:28:52.622721965 +0700
+@@ -244,25 +244,34 @@
+     }
+     return %orig;
+ }
+--(void)setTopOverlayVisible:(BOOL)arg1 isAutonavCanceledState:(BOOL)arg2 {
++
++- (void)setTopOverlayVisible:(BOOL)visible isAutonavCanceledState:(BOOL)canceledState {
+     if(self.isDisplayingSponsorBlockViewController) {
+-        %orig(NO, arg2);
++        %orig(NO, canceledState);
+         self.sponsorBlockButton.imageView.hidden = YES;
+         self.sponsorStartedEndedButton.imageView.hidden = YES;
+         return;
+     }
+-    BOOL overlayVisible;
+-    if([self respondsToSelector:@selector(isOverlayVisible)]) {
+-        overlayVisible = self.overlayVisible;
++    if (canceledState) {
++        if (!self.sponsorBlockButton.hidden) {
++            self.sponsorBlockButton.alpha = 0.0;
++            self.sponsorBlockButton.imageView.alpha = 0.0;
++        }
++        if (!self.sponsorStartedEndedButton.hidden) {
++            self.sponsorStartedEndedButton.alpha = 0.0;
++            self.sponsorStartedEndedButton.imageView.alpha = 0.0;
++        }
+     }
+     else {
+-        overlayVisible = [[self valueForKey:@"_isOverlayVisible"] boolValue];
++        if (!self.sponsorBlockButton.hidden) {
++            self.sponsorBlockButton.alpha = visible ? 1.0 : 0.0;
++            self.sponsorBlockButton.imageView.alpha = visible ? 1.0 : 0.0;
++        }
++        if (!self.sponsorStartedEndedButton.hidden) {
++            self.sponsorStartedEndedButton.alpha = visible ? 1.0 : 0.0;
++            self.sponsorStartedEndedButton.imageView.alpha = visible ? 1.0 : 0.0;
++        }
+     }
+-    self.sponsorBlockButton.hidden = !overlayVisible;
+-    self.sponsorStartedEndedButton.hidden = !overlayVisible;
+-    
+-    self.sponsorBlockButton.imageView.hidden = !overlayVisible;
+-    self.sponsorStartedEndedButton.imageView.hidden = !overlayVisible;
+     %orig;
+ }
+ 
