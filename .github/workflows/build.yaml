@@ -41,6 +41,6 @@ jobs:
       - 
         name: Build
         run: |
-          gmake download-youtube-reborn | grep -Ev 'getcwd|descriptor'
-          gmake do-patch | grep -Ev 'getcwd|descriptor'
+          gmake download-youtube-reborn 2>&1 | grep -Ev 'getcwd|descriptor'
+          gmake do-patch 2>&1 | grep -Ev 'getcwd|descriptor'
           gmake package FINALPACKAGE=1 2>&1 | grep -Ev 'getcwd|descriptor'
