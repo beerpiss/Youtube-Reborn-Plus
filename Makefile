@@ -1,46 +1,51 @@
 PATCH_DIR ?= Patches
 do-patch:
-	echo -e "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mApplying patches…\e[0m"; \
-	ROOTDIR=$(shell pwd); \
-	pushd $(PATCH_DIR); \
+	@printf "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mApplying patches…\e[0m\n"
+	$(eval ROOTDIR :=$(shell pwd))
+	@pushd $(PATCH_DIR) >/dev/null; \
 	for dir in *; do \
-		for PATCHFILE in $$dir/*; do \
-			if [ ! -f $$PATCHFILE.done ]; then \
-				echo -e "$$(tput setaf 2)==>$$(tput sgr0) \e[1mApplying patch $$PATCHFILE…\e[0m"; \
-				patch -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
+		for PATCHFILE in $$dir/*.diff; do \
+			if [ ! -f "$$PATCHFILE.done" ]; then \
+				printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mApplying patch %s…\e[0m\n" $$PATCHFILE; \
+				patch -sN -tp1 -d $(ROOTDIR)/Tweaks/$$dir  < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
 			fi; \
 		done; \
 	done; \
-	popd
+	popd >/dev/null
 
 dont-patch:
-	echo -e "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mUndoing patches…\e[0m"; \
-	ROOTDIR=$(shell pwd); \
-	pushd $(PATCH_DIR); \
+	@printf "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mUndoing patches…\e[0m\n"
+	$(eval ROOTDIR := $(shell pwd))
+	@pushd $(PATCH_DIR) >/dev/null; \
 	for dir in *; do \
-		set -- $$dir/*; \
+		set -- $$dir/*.diff; \
 		eval "set -- $$(awk 'BEGIN {for (i = ARGV[1]; i; i--) printf " \"$${"i"}\""}' "$$#")"; \
 		for PATCHFILE in $$@; do \
 			if [ -f $$PATCHFILE.done ]; then \
-				echo -e "$$(tput setaf 2)==>$$(tput sgr0) \e[1mUndoing patch $$PATCHFILE…\e[0m"; \
-				patch -R -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
+				printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mUndoing patch %s…\e[0m\n" $$PATCHFILE; \
+				patch -R -sN -tp1 -d $(ROOTDIR)/Tweaks/$$dir  < $$PATCHFILE; \
 				rm $$PATCHFILE.done; \
 			fi; \
 		done; \
 	done; \
-	popd
+	popd >/dev/null
 
 download-youtube-reborn:
-	ROOTDIR=$(shell pwd); \
-	TEMPDIR=$(shell mktemp -d); \
-	find $$ROOTDIR/Tweaks/Youtube-Reborn -not -name '.keep' -delete; \
-	cd $$TEMPDIR; \
-	wget -q -nc -OiOS-Tweaks.tar.gz https://github.com/LillieWeeb001/iOS-Tweaks/archive/main.tar.gz; \
-	tar -xzf iOS-Tweaks.tar.gz; \
-	cp -a iOS-Tweaks-main/YouTube\ Reborn/. $$ROOTDIR/Tweaks/Youtube-Reborn; \
-	cd $$ROOTDIR; \
-	rm -rf $$TEMPDIR
+	@printf "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mDownloading YouTube Reborn…\e[0m\n"
+	$(eval ROOTDIR := $(shell pwd))
+	$(eval TEMPDIR := $(shell mktemp -d))
+	
+	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mCleaning old YouTube Reborn…\e[0m\n"; \
+	find $(ROOTDIR)/Tweaks/Youtube-Reborn -not -name '.keep' -delete
+	
+	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mDownloading YouTube Reborn…\e[0m\n"
+	wget -q -nc -O$(TEMPDIR)/iOS-Tweaks.tar.gz https://github.com/LillieWeeb001/iOS-Tweaks/archive/main.tar.gz
+
+	@printf "$$(tput setaf 4)==>$$(tput sgr0) \e[1mExtracting YouTube Reborn…\e[0m\n"; \
+	tar -xzf $(TEMPDIR)/iOS-Tweaks.tar.gz -C $(TEMPDIR); \
+	cp -a $(TEMPDIR)/iOS-Tweaks-main/YouTube\ Reborn/. $(ROOTDIR)/Tweaks/Youtube-Reborn; \
+	rm -rf $(TEMPDIR)
 
 
 MODULES = jailed
@@ -68,16 +73,16 @@ SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Youtube-
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
-	@echo -e "$(tput setaf 2)==>$(tput sgr0) \e[1mCopying resources bundles…\e[0m"
+	@printf "$(tput setaf 2)==>$(tput sgr0) \e[1mCopying resources bundles…\e[0m\n"
 	@mkdir -p Resources/Frameworks/Alderis.framework && find .theos/obj/install/Library/Frameworks/Alderis.framework -maxdepth 1 -type f -exec cp {} Resources/Frameworks/Alderis.framework/ \;
 	@cp -R Tweaks/iSponsorBlock/layout/var/mobile/Library/Application\ Support/iSponsorBlock Resources/iSponsorBlock.bundle
 	@cp -R Tweaks/YouPiP/layout/Library/Application\ Support/YouPiP.bundle Resources/
 
-	@echo -e "$(tput setaf 2)==>$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m"
+	@printf "$(tput setaf 2)==>$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m\n"
 	@install_name_tool -change /usr/lib/libcolorpicker.dylib @rpath/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib
 	@install_name_tool -change /Library/Frameworks/Alderis.framework/Alderis @rpath/Alderis.framework/Alderis .theos/obj/libcolorpicker.dylib
 
 before-clean::
-	@echo -e "$(tput setaf 6)==>$(tput sgr0) \e[1mDeleting copied resources…\e[0m"
+	@printf "$(tput setaf 6)==>$(tput sgr0) \e[1mDeleting copied resources…\e[0m\n"
 	@find Resources -not -name '.keep' -delete
 	
