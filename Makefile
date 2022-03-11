@@ -50,7 +50,7 @@ download-youtube-reborn:
 
 MODULES = jailed
 export TARGET := iphone:clang:14.5:14.0
-export ARCHS = arm64
+export ARCHS = arm64 arm64e
 export GO_EASY_ON_ME = 1
 export SIDELOADED = 1
 export FINALPACKAGE ?= 1
