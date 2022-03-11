@@ -1,10 +1,12 @@
 PATCH_DIR ?= Patches
 do-patch:
+	echo -e "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mApplying patches…\e[0m"; \
 	ROOTDIR=$(shell pwd); \
 	pushd $(PATCH_DIR); \
 	for dir in *; do \
 		for PATCHFILE in $$dir/*; do \
 			if [ ! -f $$PATCHFILE.done ]; then \
+				echo -e "$$(tput setaf 2)==>$$(tput sgr0) \e[1mApplying patch $$PATCHFILE…\e[0m"; \
 				patch -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
 			fi; \
@@ -13,6 +15,7 @@ do-patch:
 	popd
 
 dont-patch:
+	echo -e "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mUndoing patches…\e[0m"; \
 	ROOTDIR=$(shell pwd); \
 	pushd $(PATCH_DIR); \
 	for dir in *; do \
@@ -20,6 +23,7 @@ dont-patch:
 		eval "set -- $$(awk 'BEGIN {for (i = ARGV[1]; i; i--) printf " \"$${"i"}\""}' "$$#")"; \
 		for PATCHFILE in $$@; do \
 			if [ -f $$PATCHFILE.done ]; then \
+				echo -e "$$(tput setaf 2)==>$$(tput sgr0) \e[1mUndoing patch $$PATCHFILE…\e[0m"; \
 				patch -R -sN -tp1 -d $$ROOTDIR/Tweaks/$$dir  < $$PATCHFILE; \
 				rm $$PATCHFILE.done; \
 			fi; \
@@ -64,13 +68,16 @@ SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Youtube-
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
+	@echo -e "$(tput setaf 2)==>$(tput sgr0) \e[1mCopying resources bundles…\e[0m"
 	@mkdir -p Resources/Frameworks/Alderis.framework && find .theos/obj/install/Library/Frameworks/Alderis.framework -maxdepth 1 -type f -exec cp {} Resources/Frameworks/Alderis.framework/ \;
 	@cp -R Tweaks/iSponsorBlock/layout/var/mobile/Library/Application\ Support/iSponsorBlock Resources/iSponsorBlock.bundle
 	@cp -R Tweaks/YouPiP/layout/Library/Application\ Support/YouPiP.bundle Resources/
 
+	@echo -e "$(tput setaf 2)==>$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m"
 	@install_name_tool -change /usr/lib/libcolorpicker.dylib @rpath/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib
 	@install_name_tool -change /Library/Frameworks/Alderis.framework/Alderis @rpath/Alderis.framework/Alderis .theos/obj/libcolorpicker.dylib
 
 before-clean::
+	@echo -e "$(tput setaf 6)==>$(tput sgr0) \e[1mDeleting copied resources…\e[0m"
 	@find Resources -not -name '.keep' -delete
 	
