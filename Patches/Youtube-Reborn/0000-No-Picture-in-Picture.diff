@@ -112,7 +112,7 @@ diff -urN Youtube-Reborn/Controllers/PictureInPictureController.m Youtube-Reborn
 \ No newline at end of file
 diff -urN Youtube-Reborn/Controllers/RebornSettingsController.m Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m
 --- Youtube-Reborn/Controllers/RebornSettingsController.m	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m	2022-03-11 12:39:30.308648881 +0700
++++ Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m	2022-03-11 12:48:28.679368702 +0700
 @@ -75,14 +75,6 @@
                  cell.accessoryView = hideRebornDWNButton;
              }
@@ -154,7 +154,7 @@ diff -urN Youtube-Reborn/Controllers/RebornSettingsController.m Youtube-Reborn+N
 +@end
 diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+NoPiP/Tweak.h
 --- Youtube-Reborn/Tweak.h	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Tweak.h	2022-03-11 12:40:07.538339775 +0700
++++ Youtube-Reborn+NoPiP/Tweak.h	2022-03-11 12:48:28.681375737 +0700
 @@ -80,9 +80,7 @@
  // Tweak Variables
  
@@ -169,7 +169,7 @@ diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+NoPiP/Tweak.h
 +extern NSString *YTApiKey;
 diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 --- Youtube-Reborn/Tweak.xm	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-11 12:38:15.295099824 +0700
++++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-11 12:50:10.832062393 +0700
 @@ -4,7 +4,6 @@
  #import <AFNetworking/AFNetworking.h>
  #import <MediaRemote/MediaRemote.h>
@@ -254,10 +254,11 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
              if ([overlayButtons[2] isEqual:@"OP"]) {
                  [self.overlayButtonThree addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
              }
-@@ -656,63 +632,6 @@
+@@ -655,62 +631,6 @@
+         }
      }];
  }
- 
+-
 -%new;
 -- (void)pictureInPicture {
 -    NSInteger videoStatus = [stateOut playerState];
@@ -313,12 +314,10 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 -        [pipViewController presentViewController:alertPip animated:YES completion:nil];
 -    }
 -}
--%end
--
+ %end
+ 
  %group gNoVideoAds
- %hook YTAdsInnerTubeContextDecorator
- - (void)decorateContext:(id)arg1 {
-@@ -1842,4 +1761,4 @@
+@@ -1842,4 +1762,4 @@
          }
          %init(_ungrouped);
      }
