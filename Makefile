@@ -14,7 +14,7 @@ do-patch:
 	done; \
 	popd >/dev/null
 
-dont-patch:
+undo-patch:
 	@printf "$$(tput setaf 1)>$$(tput sgr0) \e[1m\e[3mUndoing patches…\e[0m\n"
 	$(eval ROOTDIR := $(shell pwd))
 	@pushd $(PATCH_DIR) >/dev/null; \
