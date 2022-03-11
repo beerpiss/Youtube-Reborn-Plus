@@ -15,11 +15,12 @@ diff -urN Youtube-Reborn/Controllers/RootOptionsController.h Youtube-Reborn+susp
 diff -urN Youtube-Reborn/Controllers/RootOptionsController.m Youtube-Reborn+suspend/Controllers/RootOptionsController.m
 --- Youtube-Reborn/Controllers/RootOptionsController.m	2022-03-02 09:27:53.000000000 +0700
 +++ Youtube-Reborn+suspend/Controllers/RootOptionsController.m	2022-03-10 20:12:41.688911651 +0700
-@@ -367,6 +367,7 @@
+@@ -367,6 +367,8 @@
  }
  
  - (void)apply {
 +    [[UIApplication sharedApplication] suspend];
++    [NSThread sleepForTimeInterval:1.0];
      exit(0); 
  }
  
