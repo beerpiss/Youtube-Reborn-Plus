@@ -7,7 +7,7 @@ do-patch:
 		for PATCHFILE in $$dir/*.diff; do \
 			if [ ! -f "$$PATCHFILE.done" ]; then \
 				printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mApplying patch %s…\e[0m\n" $$PATCHFILE; \
-				patch -sN -tp1 -d $(ROOTDIR)/Tweaks/$$dir  < $$PATCHFILE; \
+				patch -sN -tp1 -d $(ROOTDIR)/Tweaks/$$dir < $$PATCHFILE; \
 				touch $$PATCHFILE.done; \
 			fi; \
 		done; \
@@ -39,13 +39,13 @@ download-youtube-reborn:
 	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mCleaning old YouTube Reborn…\e[0m\n"; \
 	find $(ROOTDIR)/Tweaks/Youtube-Reborn/ -mindepth 1 -not -name '.keep' -delete
 	
-	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mDownloading YouTube Reborn…\e[0m\n"; \
+	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mDownloading YouTube Reborn tarball…\e[0m\n"; \
 	wget -q -nc -O$(TEMPDIR)/iOS-Tweaks.tar.gz https://github.com/LillieWeeb001/iOS-Tweaks/archive/main.tar.gz
 
 	@printf "$$(tput setaf 4)==>$$(tput sgr0) \e[1mExtracting YouTube Reborn…\e[0m\n"; \
 	tar -xzf $(TEMPDIR)/iOS-Tweaks.tar.gz -C $(TEMPDIR); \
 	cp -a $(TEMPDIR)/iOS-Tweaks-main/YouTube\ Reborn/. $(ROOTDIR)/Tweaks/Youtube-Reborn; \
-	rm -rf $(TEMPDIR) $(ROOTDIR)/Patches/*.done
+	rm -rf $(TEMPDIR) $(ROOTDIR)/$(PATCHDIR)/Youtube-Reborn/*.done
 
 
 MODULES = jailed
