@@ -112,7 +112,16 @@ diff -urN Youtube-Reborn/Controllers/PictureInPictureController.m Youtube-Reborn
 \ No newline at end of file
 diff -urN Youtube-Reborn/Controllers/RebornSettingsController.m Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m
 --- Youtube-Reborn/Controllers/RebornSettingsController.m	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m	2022-03-11 12:48:28.679368702 +0700
++++ Youtube-Reborn+NoPiP/Controllers/RebornSettingsController.m	2022-03-11 13:22:04.396778292 +0700
+@@ -39,7 +39,7 @@
+         return 1;
+     }
+     if (section == 1) {
+-        return 3;
++        return 2;
+     }
+     return 0;
+ }
 @@ -75,14 +75,6 @@
                  cell.accessoryView = hideRebornDWNButton;
              }

@@ -10,13 +10,6 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+APIKey/Tweak.xm
  
  UIColor *hexColour() {
      NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"kYTRebornColourOptionsVTwo"];
-@@ -1842,4 +1842,4 @@
-         }
-         %init(_ungrouped);
-     }
--}
-\ No newline at end of file
-+}
 diff -urN Youtube-Reborn/XCDYouTubeKit/XCDYouTubeClient.m Youtube-Reborn+APIKey/XCDYouTubeKit/XCDYouTubeClient.m
 --- Youtube-Reborn/XCDYouTubeKit/XCDYouTubeClient.m	2022-03-02 09:27:53.000000000 +0700
 +++ Youtube-Reborn+APIKey/XCDYouTubeKit/XCDYouTubeClient.m	2022-03-10 20:36:05.071923402 +0700
