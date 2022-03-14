@@ -178,7 +178,7 @@ diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+NoPiP/Tweak.h
 +extern NSString *YTApiKey;
 diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 --- Youtube-Reborn/Tweak.xm	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-11 13:43:04.974869583 +0700
++++ Youtube-Reborn+NoPiP/Tweak.xm	2022-03-14 13:59:07.240501431 +0700
 @@ -1,10 +1,10 @@
  #import <Foundation/Foundation.h>
  #import <UIKit/UIKit.h>
@@ -220,36 +220,10 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
              if ([overlayButtons[0] isEqual:@"OP"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
              }
-@@ -199,18 +191,12 @@
+@@ -199,90 +191,31 @@
              if ([overlayButtons[0] isEqual:@"DWN"]) {
                  [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
              }
--            if ([overlayButtons[0] isEqual:@"PIP"]) {
--                [self.overlayButtonOne addTarget:self action:@selector(pictureInPicture) forControlEvents:UIControlEventTouchUpInside];
--            }
-             if ([overlayButtons[0] isEqual:@"OP"]) {
-                 [self.overlayButtonOne addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
-             }
-             if ([overlayButtons[1] isEqual:@"DWN"]) {
-                 [self.overlayButtonTwo addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
-             }
--            if ([overlayButtons[1] isEqual:@"PIP"]) {
--                [self.overlayButtonTwo addTarget:self action:@selector(pictureInPicture) forControlEvents:UIControlEventTouchUpInside];
--            }
-             if ([overlayButtons[1] isEqual:@"OP"]) {
-                 [self.overlayButtonTwo addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
-             }
-@@ -231,59 +217,6 @@
-             [self addSubview:self.overlayButtonOne];
-             [self addSubview:self.overlayButtonTwo];
-         }
--        if (overlayButtonsCount == 3) {
--            self.overlayButtonOne = [UIButton buttonWithType:UIButtonTypeRoundedRect];
--            self.overlayButtonTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
--            self.overlayButtonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
--            if ([overlayButtons[0] isEqual:@"DWN"]) {
--                [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
--            }
 -            if ([overlayButtons[0] isEqual:@"PIP"]) {
 -                [self.overlayButtonOne addTarget:self action:@selector(pictureInPicture) forControlEvents:UIControlEventTouchUpInside];
 -            }
@@ -265,6 +239,45 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 -            if ([overlayButtons[1] isEqual:@"OP"]) {
 -                [self.overlayButtonTwo addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
 -            }
+-            [self.overlayButtonOne setTitle:overlayButtons[0] forState:UIControlStateNormal];
+-            [self.overlayButtonTwo setTitle:overlayButtons[1] forState:UIControlStateNormal];
+-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowStatusBarInOverlay"] == YES) {
+-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableiPadStyleOniPhone"] == YES) {
+-                    self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
+-                    self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
+-                } else {
+-                    self.overlayButtonOne.frame = CGRectMake(40, 24, 40.0, 30.0);
+-                    self.overlayButtonTwo.frame = CGRectMake(85, 24, 40.0, 30.0);
+-                }
+-            } else {
+-                self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
+-                self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
+-            }
+-            [self addSubview:self.overlayButtonOne];
+-            [self addSubview:self.overlayButtonTwo];
+-        }
+-        if (overlayButtonsCount == 3) {
+-            self.overlayButtonOne = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+-            self.overlayButtonTwo = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+-            self.overlayButtonThree = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+-            if ([overlayButtons[0] isEqual:@"DWN"]) {
+-                [self.overlayButtonOne addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
+-            }
+-            if ([overlayButtons[0] isEqual:@"PIP"]) {
+-                [self.overlayButtonOne addTarget:self action:@selector(pictureInPicture) forControlEvents:UIControlEventTouchUpInside];
+-            }
+             if ([overlayButtons[0] isEqual:@"OP"]) {
+                 [self.overlayButtonOne addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
+             }
+             if ([overlayButtons[1] isEqual:@"DWN"]) {
+                 [self.overlayButtonTwo addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
+             }
+-            if ([overlayButtons[1] isEqual:@"PIP"]) {
+-                [self.overlayButtonTwo addTarget:self action:@selector(pictureInPicture) forControlEvents:UIControlEventTouchUpInside];
+-            }
+             if ([overlayButtons[1] isEqual:@"OP"]) {
+                 [self.overlayButtonTwo addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
+             }
 -            if ([overlayButtons[2] isEqual:@"DWN"]) {
 -                [self.overlayButtonThree addTarget:self action:@selector(optionsAction:) forControlEvents:UIControlEventTouchUpInside];
 -            }
@@ -274,32 +287,64 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
 -            if ([overlayButtons[2] isEqual:@"OP"]) {
 -                [self.overlayButtonThree addTarget:self action:@selector(playInApp) forControlEvents:UIControlEventTouchUpInside];
 -            }
--            [self.overlayButtonOne setTitle:overlayButtons[0] forState:UIControlStateNormal];
--            [self.overlayButtonTwo setTitle:overlayButtons[1] forState:UIControlStateNormal];
+             [self.overlayButtonOne setTitle:overlayButtons[0] forState:UIControlStateNormal];
+             [self.overlayButtonTwo setTitle:overlayButtons[1] forState:UIControlStateNormal];
 -            [self.overlayButtonThree setTitle:overlayButtons[2] forState:UIControlStateNormal];
--            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowStatusBarInOverlay"] == YES) {
--                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableiPadStyleOniPhone"] == YES) {
--                    self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
--                    self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
+             if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowStatusBarInOverlay"] == YES) {
+                 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableiPadStyleOniPhone"] == YES) {
+                     self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
+                     self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
 -                    self.overlayButtonThree.frame = CGRectMake(130, 9, 40.0, 30.0);
--                } else {
--                    self.overlayButtonOne.frame = CGRectMake(40, 24, 40.0, 30.0);
--                    self.overlayButtonTwo.frame = CGRectMake(85, 24, 40.0, 30.0);
+                 } else {
+                     self.overlayButtonOne.frame = CGRectMake(40, 24, 40.0, 30.0);
+                     self.overlayButtonTwo.frame = CGRectMake(85, 24, 40.0, 30.0);
 -                    self.overlayButtonThree.frame = CGRectMake(130, 24, 40.0, 30.0);
--                }
--            } else {
--                self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
--                self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
+                 }
+             } else {
+                 self.overlayButtonOne.frame = CGRectMake(40, 9, 40.0, 30.0);
+                 self.overlayButtonTwo.frame = CGRectMake(85, 9, 40.0, 30.0);
 -                self.overlayButtonThree.frame = CGRectMake(130, 9, 40.0, 30.0);
--            }
--            [self addSubview:self.overlayButtonOne];
--            [self addSubview:self.overlayButtonTwo];
+             }
+             [self addSubview:self.overlayButtonOne];
+             [self addSubview:self.overlayButtonTwo];
 -            [self addSubview:self.overlayButtonThree];
--        }
+         }
      }
      return self;
+@@ -344,32 +277,6 @@
+                 }
+             }
+         }
+-        if (overlayButtonsCount == 3) {
+-            if (!self.overlayButtonOne.hidden) {
+-                int rotation = [layoutOut playerViewLayout];
+-                if (rotation == 2) {
+-                    self.overlayButtonOne.alpha = visible ? 1.0 : 0.0;
+-                } else {
+-                    self.overlayButtonOne.alpha = 0.0;
+-                }
+-            }
+-            if (!self.overlayButtonTwo.hidden) {
+-                int rotation = [layoutOut playerViewLayout];
+-                if (rotation == 2) {
+-                    self.overlayButtonTwo.alpha = visible ? 1.0 : 0.0;
+-                } else {
+-                    self.overlayButtonTwo.alpha = 0.0;
+-                }
+-            }
+-            if (!self.overlayButtonThree.hidden) {
+-                int rotation = [layoutOut playerViewLayout];
+-                if (rotation == 2) {
+-                    self.overlayButtonThree.alpha = visible ? 1.0 : 0.0;
+-                } else {
+-                    self.overlayButtonThree.alpha = 0.0;
+-                }
+-            }
+-        }
+     }
+     %orig;
  }
-@@ -655,62 +588,6 @@
+@@ -655,62 +562,6 @@
          }
      }];
  }
@@ -362,7 +407,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+NoPiP/Tweak.xm
  %end
  
  %group gNoVideoAds
-@@ -1842,4 +1719,4 @@
+@@ -1842,4 +1693,4 @@
          }
          %init(_ungrouped);
      }

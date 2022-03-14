@@ -2,6 +2,9 @@
 #import <UIKit/UIKit.h>
 #import <dlfcn.h>
 
+#define YT_BUNDLE_ID @"com.google.ios.youtube"
+#define YT_NAME @"YouTube"
+
 // Workaround for https://github.com/MiRO92/uYou-for-YouTube/issues/12
 %hook YTAdsInnerTubeContextDecorator
 - (void)decorateContext:(id)arg1 {
@@ -16,12 +19,6 @@
 // YouAreThere: https://github.com/PoomSmart/YouAreThere
 %hook YTColdConfig
 - (BOOL)respectDeviceCaptionSetting {
-    return NO;
-}
-- (BOOL)shouldUseAppThemeSetting {
-    return YES;
-}
-- (BOOL)enableYouthereCommandsOnIos {
     return NO;
 }
 %end
@@ -69,24 +66,6 @@
 %end
 
 // NoYTPremium: https://github.com/PoomSmart/NoYTPremium {{{
-// Alert
-%hook YTCommerceEventGroupHandler
-- (void)addEventHandlers {
-}
-%end
-
-// Full-screen
-%hook YTInterstitialPromoEventGroupHandler
-- (void)addEventHandlers {
-}
-%end
-
-%hook YTIShowFullscreenInterstitialCommand
-- (BOOL)shouldThrottleInterstitial {
-    return YES;
-}
-%end
-
 // "Try new features" in settings
 %hook YTSettingsSectionItemManager
 - (void)updatePremiumEarlyAccessSectionWithEntry:(id)arg1 {
@@ -110,9 +89,6 @@
 // }}}
 
 // IAmYouTube: https://github.com/PoomSmart/IAmYouTube {{{
-#define YT_BUNDLE_ID @"com.google.ios.youtube"
-#define YT_NAME @"YouTube"
-
 @interface SSOConfiguration : NSObject
 @end
 
@@ -187,7 +163,4 @@
     return %orig;
 }
 %end
-
-#undef YT_BUNDLE_ID
-#undef YT_NAME
 // }}}
