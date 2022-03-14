@@ -49,3 +49,8 @@ jobs:
           tar -xf result.tar -C Tweaks/
           gmake do-patch 2>&1 | grep -Ev 'getcwd|descriptor'
           gmake package FINALPACKAGE=1 2>&1 | grep -Ev 'getcwd|descriptor'
+      -
+        name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: packages/YoutubeRebornPlus1.ipa
