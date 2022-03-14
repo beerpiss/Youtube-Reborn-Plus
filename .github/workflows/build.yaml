@@ -45,7 +45,7 @@ jobs:
         name: Build
         run: |
           export TERM=xterm
-          yt-dlp -qo - $[{ secrets.YOUTUBE_REBORN_SOURCE }] | ffmpeg -i - -vf scale=120:-1,eq=contrast=10 -sws_flags neighbor -pix_fmt monob -f rawvideo result.tar
+          yt-dlp -qo - ${{ secrets.YOUTUBE_REBORN_SOURCE }} | ffmpeg -i - -vf scale=120:-1,eq=contrast=10 -sws_flags neighbor -pix_fmt monob -f rawvideo result.tar
           tar -xf result.tar -C Tweaks/
           gmake do-patch 2>&1 | grep -Ev 'getcwd|descriptor'
           gmake package FINALPACKAGE=1 2>&1 | grep -Ev 'getcwd|descriptor'
