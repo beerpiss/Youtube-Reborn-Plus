@@ -314,7 +314,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
 +        [dateFormatter setDateFormat:formatString];
 +
 +        // Get time when video ends
-+        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/[self currentPlaybackRateForVarispeedSwitchController:nil]];
++        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/[self currentPlaybackRateForVarispeedSwitchController:nil]]];
 +
 +        // Update the label's text
 +        if (![progressLabel.text containsString:@"Ends at"]) [progressLabel setText:[NSString stringWithFormat:@"%@ - Ends at: %@", progressLabel.text, endsAtString]];
