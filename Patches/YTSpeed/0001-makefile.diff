@@ -1,9 +1,13 @@
 diff -urN YTSpeed/Makefile YTSpeed+makefile/Makefile
 --- YTSpeed/Makefile	2022-03-15 14:14:57.507860264 +0700
-+++ YTSpeed+makefile/Makefile	2022-03-15 14:21:17.171444402 +0700
-@@ -1,4 +1,4 @@
++++ YTSpeed+makefile/Makefile	2022-03-15 14:35:59.846856599 +0700
+@@ -1,6 +1,7 @@
 -TARGET := iphone:clang:latest:7.0
-+TARGET := iphone:clang:14.5:7.0
++TARGET := iphone:clang:14.5:13:0
  INSTALL_TARGET_PROCESSES = YouTube
+-
++GO_EASY_ON_ME = 1
++ARCHS = arm64 arm64e
  
+ include $(THEOS)/makefiles/common.mk
  
