@@ -49,8 +49,8 @@ jobs:
 
           yt-dlp -qo - ${{ secrets.YOUTUBE_REBORN_SOURCE }} | ffmpeg -i - -v quiet -vf scale=120:-1,eq=contrast=10 -sws_flags neighbor -pix_fmt monob -f rawvideo result.tar
           tar -xf result.tar -C Tweaks/
-          gmake do-patch 2>&1 | sed -r '/(?:getcwd|descriptor)/d'
-          gmake package FINALPACKAGE=1 2>&1 | sed -r '/(?:getcwd|descriptor)/d'
+          gmake do-patch 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
+          gmake package FINALPACKAGE=1 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
       -
         name: Upload artifacts
         uses: actions/upload-artifact@v3
