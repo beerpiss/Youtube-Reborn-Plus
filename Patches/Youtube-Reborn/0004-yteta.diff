@@ -1,7 +1,29 @@
 diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
 --- Youtube-Reborn/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
-+++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
-@@ -31,11 +31,17 @@
++++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 18:22:07.204430124 +0700
+@@ -11,7 +11,7 @@
+ - (void)loadView {
+ 	[super loadView];
+ 
+-    self.title = @"Video Options";
++    self.title = @"Options";
+     if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
+         self.view.backgroundColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.969 alpha:1.0];
+         [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]}];
+@@ -21,21 +21,27 @@
+         [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
+         self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+     }
+-
++    
+     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+-    self.navigationItem.rightBarButtonItem = doneButton;
++    self.navigationItem.leftBarButtonItem = doneButton;
+ 
+-    if (@available(iOS 15.0, *)) {
++	if (@available(iOS 15.0, *)) {
+     	[self.tableView setSectionHeaderTopPadding:0.0f];
+ 	}
  }
  
  - (NSInteger)numberOfSectionsInTableView:(UITableView *)theTableView {
@@ -14,14 +36,14 @@ diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTE
 +    if (section == 0) {
 +        return 10;
 +    }
-+    else if (section == 1) {
++    if (section == 1) {
 +        return 3;
 +    }
 +    return 0;
  }
  
  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-@@ -53,85 +59,113 @@
+@@ -53,96 +59,138 @@
              cell.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
              cell.textLabel.textColor = [UIColor whiteColor];
          }
@@ -186,7 +208,7 @@ diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTE
 +                cell.accessoryView = alwaysShowPlayerBar;
 +            }
 +        }
-+        else if (indexPath.section == 1) {
++        if (indexPath.section == 1) {
 +            if (indexPath.row == 0) {
 +                cell.textLabel.text = @"Show When Video Ends";
 +                cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -214,7 +236,33 @@ diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTE
          }
      }
      return cell;
-@@ -253,4 +287,35 @@
+ }
+ 
++- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
++    return [UIView new];
++}
++
++- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
++    if (section == 0 || section == 1) {
++        return 50;
++    }
++    return 0;
++}
++
+ - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {        
+     return [UIView new];
+ }
+ 
+ - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+-    return 10;
++    if (section == 1) {
++        return 10;
++    }
++    return 0;
+ }
+ 
+ @end
+@@ -253,4 +301,35 @@
      }
  }
  
@@ -280,8 +328,8 @@ diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+YTETA/Tweak.h
  @interface YTLocalPlaybackController : NSObject
 diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
 --- Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
-+++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:45:35.615263916 +0700
-@@ -1630,6 +1630,47 @@
++++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 19:28:16.913217401 +0700
+@@ -1630,6 +1630,48 @@
  }
  %end
  
@@ -330,7 +378,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
  %ctor {
      @autoreleasepool {
          if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kEnableNoVideoAds"] == nil) {
-@@ -1684,6 +1725,9 @@
+@@ -1684,6 +1726,9 @@
          if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == YES or [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == NO) {
              %init(gAlwaysShowPlayerBar);
          }
