@@ -1,77 +1,6 @@
---- Youtube-Reborn/Tweak.h	2022-03-15 16:19:29.248921677 +0700
-+++ Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:29:55.956581320 +0700
-@@ -49,7 +49,9 @@
- 
--@interface YTPlayerViewController : UIViewController <YTPlaybackController>
-+@interface YTPlayerViewController : UIViewController
- - (void)didSeekToTime:(CGFloat)time toleranceBefore:(CGFloat)before toleranceAfter:(CGFloat)after;
-+- (NSInteger)playerState;
-+- (float)currentPlaybackRateForVarispeedSwitchController:(id)arg1;
- @end
- 
- @interface YTLocalPlaybackController : NSObject
---- Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
-+++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:28:44.078408940 +0700
-@@ -1630,6 +1630,47 @@
- }
- %end
- 
-+%group gShowWhenVideoEnds
-+%hook YTPlayerViewController
-+-(void)singleVideo:(id)arg1 currentVideoTimeDidChange:(id)arg2 {
-+	%orig;
-+
-+	// Fixes crash with auto-playing videos on the home page
-+	if ([self.view.overlayView class] != %c(YTMainAppVideoPlayerOverlayView)) return;
-+
-+	// Get remaining seconds
-+	float remainingSeconds = self.view.overlayView.playerBar.playerBar.totalTime - self.view.overlayView.playerBar.playerBar.mediaTime;
-+
-+	// Get time label
-+	UILabel *progressLabel = self.view.overlayView.playerBar.durationLabel;
-+	// Modify label
-+	if (![progressLabel.text containsString:@"Ends at"]) {
-+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-+        NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"mm"];
-+
-+        // Add seconds, if they're enabled
-+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowSeconds"] == YES) [formatString appendString:@":ss"];
-+
-+        // Determine 12h/24h time
-+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kUse24HourClock"] == YES) [formatString insertString:@"HH:" atIndex:0];
-+        else [formatString insertString:@"hh:" atIndex:0];
-+
-+        // Make NSDateFormatter use our time format
-+        [dateFormatter setDateFormat:formatString];
-+
-+        // Get time when video ends
-+        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/[self currentPlaybackRateForVarispeedSwitchController:nil]];
-+
-+        // Update the label's text
-+        if (![progressLabel.text containsString:@"Ends at"]) [progressLabel setText:[NSString stringWithFormat:@"%@ - Ends at: %@", progressLabel.text, endsAtString]];
-+
-+        // Resize the label's frame so that the new text fits
-+        [progressLabel sizeToFit];
-+    }
-+}
-+%end
-+%end
-+
- %ctor {
-     @autoreleasepool {
-         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kEnableNoVideoAds"] == nil) {
-@@ -1684,6 +1725,9 @@
-         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == YES or [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == NO) {
-             %init(gAlwaysShowPlayerBar);
-         }
-+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowWhenVideoEnds"] == YES) {
-+            %init(gShowWhenVideoEnds);
-+        }
-         NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"kYTRebornColourOptionsVTwo"];
-         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:colorData error:nil];
-         [unarchiver setRequiresSecureCoding:NO];
---- Youtube-Reborn/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
-+++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
+diff -urN Tweaks/Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Tweaks/Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
+--- Tweaks/Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
++++ Tweaks/Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
 @@ -31,11 +31,17 @@
  }
  
@@ -323,3 +252,90 @@
 +
 +
 +@end
+diff -urN Tweaks/Youtube-Reborn+NoPiP/Tweak.h Tweaks/Youtube-Reborn+YTETA/Tweak.h
+--- Tweaks/Youtube-Reborn+NoPiP/Tweak.h	2022-03-15 16:19:29.248921677 +0700
++++ Tweaks/Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:58:52.392113306 +0700
+@@ -1,5 +1,10 @@
+ @interface UIView ()
+ - (UIViewController *)_viewControllerForAncestor;
++@property(nonatomic, readwrite) UIView *overlayView;
++@property(nonatomic, readwrite) UIView *playerBar;
++@property(nonatomic, readwrite) UILabel *durationLabel;
++@property(nonatomic, assign, readonly) CGFloat totalTime;
++@property(nonatomic, assign, readonly) CGFloat mediaTime;
+ @end
+ 
+ @interface YTQTMButton : UIButton
+@@ -47,8 +52,10 @@
+ @protocol YTPlaybackController
+ @end
+ 
+-@interface YTPlayerViewController : UIViewController <YTPlaybackController>
++@interface YTPlayerViewController : UIViewController
+ - (void)didSeekToTime:(CGFloat)time toleranceBefore:(CGFloat)before toleranceAfter:(CGFloat)after;
++- (NSInteger)playerState;
++- (float)currentPlaybackRateForVarispeedSwitchController:(id)arg1;
+ @end
+ 
+ @interface YTLocalPlaybackController : NSObject
+diff -urN Tweaks/Youtube-Reborn+NoPiP/Tweak.xm Tweaks/Youtube-Reborn+YTETA/Tweak.xm
+--- Tweaks/Youtube-Reborn+NoPiP/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
++++ Tweaks/Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:45:35.615263916 +0700
+@@ -1630,6 +1630,47 @@
+ }
+ %end
+ 
++%group gShowWhenVideoEnds
++%hook YTPlayerViewController
++-(void)singleVideo:(id)arg1 currentVideoTimeDidChange:(id)arg2 {
++	%orig;
++
++	// Fixes crash with auto-playing videos on the home page
++	if ([self.view.overlayView class] != %c(YTMainAppVideoPlayerOverlayView)) return;
++
++	// Get remaining seconds
++	float remainingSeconds = self.view.overlayView.playerBar.playerBar.totalTime - self.view.overlayView.playerBar.playerBar.mediaTime;
++
++	// Get time label
++	UILabel *progressLabel = self.view.overlayView.playerBar.durationLabel;
++	// Modify label
++	if (![progressLabel.text containsString:@"Ends at"]) {
++        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
++        NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"mm"];
++
++        // Add seconds, if they're enabled
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowSeconds"] == YES) [formatString appendString:@":ss"];
++
++        // Determine 12h/24h time
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kUse24HourClock"] == YES) [formatString insertString:@"HH:" atIndex:0];
++        else [formatString insertString:@"hh:" atIndex:0];
++
++        // Make NSDateFormatter use our time format
++        [dateFormatter setDateFormat:formatString];
++
++        // Get time when video ends
++        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/[self currentPlaybackRateForVarispeedSwitchController:nil]];
++
++        // Update the label's text
++        if (![progressLabel.text containsString:@"Ends at"]) [progressLabel setText:[NSString stringWithFormat:@"%@ - Ends at: %@", progressLabel.text, endsAtString]];
++
++        // Resize the label's frame so that the new text fits
++        [progressLabel sizeToFit];
++    }
++}
++%end
++%end
++
+ %ctor {
+     @autoreleasepool {
+         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kEnableNoVideoAds"] == nil) {
+@@ -1684,6 +1725,9 @@
+         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == YES or [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == NO) {
+             %init(gAlwaysShowPlayerBar);
+         }
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowWhenVideoEnds"] == YES) {
++            %init(gShowWhenVideoEnds);
++        }
+         NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"kYTRebornColourOptionsVTwo"];
+         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:colorData error:nil];
+         [unarchiver setRequiresSecureCoding:NO];
