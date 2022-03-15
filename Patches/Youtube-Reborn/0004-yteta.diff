@@ -1,8 +1,9 @@
 --- Youtube-Reborn/Tweak.h	2022-03-15 16:19:29.248921677 +0700
 +++ Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:29:55.956581320 +0700
-@@ -49,6 +49,8 @@
+@@ -49,7 +49,9 @@
  
- @interface YTPlayerViewController : UIViewController <YTPlaybackController>
+-@interface YTPlayerViewController : UIViewController <YTPlaybackController>
++@interface YTPlayerViewController : UIViewController
  - (void)didSeekToTime:(CGFloat)time toleranceBefore:(CGFloat)before toleranceAfter:(CGFloat)after;
 +- (NSInteger)playerState;
 +- (float)currentPlaybackRateForVarispeedSwitchController:(id)arg1;
