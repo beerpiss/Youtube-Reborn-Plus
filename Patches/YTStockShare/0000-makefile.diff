@@ -1,0 +1,12 @@
+diff -urN YTStockShare/Makefile YTStockShare+makefile/Makefile
+--- YTStockShare/Makefile	2022-03-15 14:19:38.550305025 +0700
++++ YTStockShare+makefile/Makefile	2022-03-15 14:23:07.114668636 +0700
+@@ -1,6 +1,5 @@
+-export PREFIX=$(THEOS)/toolchain/Xcode11.xctoolchain/usr/bin/
+-export SDKVERSION = 14.4
+-export ARCHS = arm64 arm64e
++ARCHS = arm64 arm64e
++TARGET := iphone:clang:14.5:13.0
+ 
+ INSTALL_TARGET_PROCESSES = YouTube
+ 

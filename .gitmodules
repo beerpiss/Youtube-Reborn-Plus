@@ -16,3 +16,9 @@
 [submodule "Tweaks/iSponsorBlock"]
 	path = Tweaks/iSponsorBlock
 	url = https://github.com/Galactic-Dev/iSponsorBlock
+[submodule "Tweaks/YTSpeed"]
+	path = Tweaks/YTSpeed
+	url = https://github.com/Lyvendia/YTSpeed
+[submodule "Tweaks/YTStockShare"]
+	path = Tweaks/YTStockShare
+	url = https://github.com/iCrazeiOS/YTStockShare
