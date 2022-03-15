@@ -1,5 +1,5 @@
-diff -urN Tweaks/Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Tweaks/Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
---- Tweaks/Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
+diff -urN Tweaks/Youtube-Reborn/Controllers/VideoOptionsController.m Tweaks/Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
+--- Tweaks/Youtube-Reborn/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
 +++ Tweaks/Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
 @@ -31,11 +31,17 @@
  }
@@ -252,8 +252,8 @@ diff -urN Tweaks/Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Tweak
 +
 +
 +@end
-diff -urN Tweaks/Youtube-Reborn+NoPiP/Tweak.h Tweaks/Youtube-Reborn+YTETA/Tweak.h
---- Tweaks/Youtube-Reborn+NoPiP/Tweak.h	2022-03-15 16:19:29.248921677 +0700
+diff -urN Tweaks/Youtube-Reborn/Tweak.h Tweaks/Youtube-Reborn+YTETA/Tweak.h
+--- Tweaks/Youtube-Reborn/Tweak.h	2022-03-15 16:19:29.248921677 +0700
 +++ Tweaks/Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:58:52.392113306 +0700
 @@ -1,5 +1,10 @@
  @interface UIView ()
@@ -278,8 +278,8 @@ diff -urN Tweaks/Youtube-Reborn+NoPiP/Tweak.h Tweaks/Youtube-Reborn+YTETA/Tweak.
  @end
  
  @interface YTLocalPlaybackController : NSObject
-diff -urN Tweaks/Youtube-Reborn+NoPiP/Tweak.xm Tweaks/Youtube-Reborn+YTETA/Tweak.xm
---- Tweaks/Youtube-Reborn+NoPiP/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
+diff -urN Tweaks/Youtube-Reborn/Tweak.xm Tweaks/Youtube-Reborn+YTETA/Tweak.xm
+--- Tweaks/Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
 +++ Tweaks/Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:45:35.615263916 +0700
 @@ -1630,6 +1630,47 @@
  }
