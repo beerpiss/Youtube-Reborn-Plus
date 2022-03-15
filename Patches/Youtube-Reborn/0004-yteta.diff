@@ -1,5 +1,5 @@
-diff -urN Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
---- Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
+diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
+--- Youtube-Reborn/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
 +++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
 @@ -31,11 +31,17 @@
  }
@@ -252,14 +252,14 @@ diff -urN Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Youtube-Rebo
 +
 +
 +@end
-diff -urN Youtube-Reborn+NoPiP/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
---- Youtube-Reborn+NoPiP/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
+diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
+--- Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
 +++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:17:19.503420401 +0700
 @@ -1630,6 +1630,47 @@
  }
  %end
  
-+%group gYTETA
++%group gShowWhenVideoEnds
 +%hook YTPlayerViewController
 +-(void)singleVideo:(id)arg1 currentVideoTimeDidChange:(id)arg2 {
 +	%orig;
