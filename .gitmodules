@@ -19,3 +19,6 @@
 [submodule "Tweaks/YTSpeed"]
 	path = Tweaks/YTSpeed
 	url = https://github.com/Lyvendia/YTSpeed
+[submodule "Tweaks/YTETA"]
+	path = Tweaks/YTETA
+	url = https://github.com/iCrazeiOS/YTETA
