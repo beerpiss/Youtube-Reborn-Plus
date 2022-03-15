@@ -16,7 +16,7 @@ obj
 
 .vscode
 Resources/*
-!Resources/.keep
+!Resources/Info.plist
 Tweaks/Youtube-Reborn/*
 !Tweaks/Youtube-Reborn/.keep
 *.done
