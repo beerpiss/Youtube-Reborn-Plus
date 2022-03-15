@@ -1,4 +1,4 @@
---- Youtube-Reborn+NoPiP/Tweak.h	2022-03-15 16:19:29.248921677 +0700
+--- Youtube-Reborn/Tweak.h	2022-03-15 16:19:29.248921677 +0700
 +++ Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:29:55.956581320 +0700
 @@ -49,6 +49,8 @@
  
@@ -9,13 +9,13 @@
  @end
  
  @interface YTLocalPlaybackController : NSObject
---- Youtube-Reborn+NoPiP/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
+--- Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
 +++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:28:44.078408940 +0700
 @@ -1630,6 +1630,47 @@
  }
  %end
  
-+%group gYTETA
++%group gShowWhenVideoEnds
 +%hook YTPlayerViewController
 +-(void)singleVideo:(id)arg1 currentVideoTimeDidChange:(id)arg2 {
 +	%orig;
@@ -69,7 +69,7 @@
          NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"kYTRebornColourOptionsVTwo"];
          NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:colorData error:nil];
          [unarchiver setRequiresSecureCoding:NO];
---- Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
+--- Youtube-Reborn/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
 +++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
 @@ -31,11 +31,17 @@
  }
