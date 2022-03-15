@@ -292,34 +292,62 @@ diff -urN Youtube-Reborn/Controllers/VideoOptionsController.m Youtube-Reborn+YTE
 +@end
 diff -urN Youtube-Reborn/Tweak.h Youtube-Reborn+YTETA/Tweak.h
 --- Youtube-Reborn/Tweak.h	2022-03-15 16:19:29.248921677 +0700
-+++ Youtube-Reborn+YTETA/Tweak.h	2022-03-15 16:58:52.392113306 +0700
-@@ -1,5 +1,10 @@
++++ Youtube-Reborn+YTETA/Tweak.h	2022-03-15 20:40:24.057175878 +0700
+@@ -1,5 +1,8 @@
  @interface UIView ()
  - (UIViewController *)_viewControllerForAncestor;
 +@property(nonatomic, readwrite) UIView *overlayView;
 +@property(nonatomic, readwrite) UIView *playerBar;
 +@property(nonatomic, readwrite) UILabel *durationLabel;
-+@property(nonatomic, assign, readonly) CGFloat totalTime;
-+@property(nonatomic, assign, readonly) CGFloat mediaTime;
  @end
  
  @interface YTQTMButton : UIButton
-@@ -47,8 +52,10 @@
+@@ -47,8 +50,11 @@
  @protocol YTPlaybackController
  @end
  
 -@interface YTPlayerViewController : UIViewController <YTPlaybackController>
 +@interface YTPlayerViewController : UIViewController
++@property float playbackRate;
  - (void)didSeekToTime:(CGFloat)time toleranceBefore:(CGFloat)before toleranceAfter:(CGFloat)after;
 +- (NSInteger)playerState;
 +- (float)currentPlaybackRateForVarispeedSwitchController:(id)arg1;
  @end
  
  @interface YTLocalPlaybackController : NSObject
+@@ -56,6 +62,7 @@
+ @end
+ 
+ @interface YTMainAppVideoPlayerOverlayViewController
++- (CGFloat)totalTime;
+ - (CGFloat)mediaTime;
+ - (int)playerViewLayout;
+ - (NSInteger)playerState;
 diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
 --- Youtube-Reborn/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
-+++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 19:28:16.913217401 +0700
-@@ -1630,6 +1630,48 @@
++++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 20:40:10.643306649 +0700
+@@ -26,13 +26,18 @@
+ }
+ %end
+ 
+-YTMainAppVideoPlayerOverlayViewController *resultOut;
++YTMainAppVideoPlayerOverlayViewController *mediaTimeOut;
++YTMainAppVideoPlayerOverlayViewController *totalTimeOut;
+ YTMainAppVideoPlayerOverlayViewController *layoutOut;
+ YTMainAppVideoPlayerOverlayViewController *stateOut;
+ 
+ %hook YTMainAppVideoPlayerOverlayViewController
+ - (CGFloat)mediaTime {
+-    resultOut = self;
++    mediaTimeOut = self;
++    return %orig;
++}
++- (CGFloat)totalTime {
++    totalTimeOut = self;
+     return %orig;
+ }
+ - (int)playerViewLayout {
+@@ -1630,6 +1635,48 @@
  }
  %end
  
@@ -332,7 +360,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
 +	if ([self.view.overlayView class] != %c(YTMainAppVideoPlayerOverlayView)) return;
 +
 +	// Get remaining seconds
-+	float remainingSeconds = self.view.overlayView.playerBar.playerBar.totalTime - self.view.overlayView.playerBar.playerBar.mediaTime;
++	float remainingSeconds = [totalTimeOut totalTime] - [mediaTimeOut mediaTime];
 +
 +	// Get time label
 +	UILabel *progressLabel = self.view.overlayView.playerBar.durationLabel;
@@ -352,7 +380,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
 +        [dateFormatter setDateFormat:formatString];
 +
 +        // Get time when video ends
-+        float videoSpeed = [self currentPlaybackRateForVarispeedSwitchController:nil];
++        float videoSpeed = self.playbackRate;
 +        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/videoSpeed]];
 +
 +        // Update the label's text
@@ -368,7 +396,7 @@ diff -urN Youtube-Reborn/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
  %ctor {
      @autoreleasepool {
          if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kEnableNoVideoAds"] == nil) {
-@@ -1684,6 +1726,9 @@
+@@ -1684,6 +1731,9 @@
          if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == YES or [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == NO) {
              %init(gAlwaysShowPlayerBar);
          }
