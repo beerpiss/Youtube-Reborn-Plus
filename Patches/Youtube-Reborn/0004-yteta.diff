@@ -1,0 +1,315 @@
+diff -urN Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m
+--- Youtube-Reborn+NoPiP/Controllers/VideoOptionsController.m	2022-03-15 16:19:18.246258486 +0700
++++ Youtube-Reborn+YTETA/Controllers/VideoOptionsController.m	2022-03-15 16:05:13.917990216 +0700
+@@ -31,11 +31,17 @@
+ }
+ 
+ - (NSInteger)numberOfSectionsInTableView:(UITableView *)theTableView {
+-    return 1;
++    return 2;
+ }
+ 
+ - (NSInteger)tableView:(UITableView *)theTableView numberOfRowsInSection:(NSInteger)section {
+-    return 10;
++    if (section == 0) {
++        return 10;
++    }
++    else if (section == 1) {
++        return 3;
++    }
++    return 0;
+ }
+ 
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+@@ -53,85 +59,113 @@
+             cell.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+             cell.textLabel.textColor = [UIColor whiteColor];
+         }
+-        if(indexPath.row == 0) {
+-            cell.textLabel.text = @"Enable No Ads (Video/HomeScreen)";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *enableNoVideoAds = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [enableNoVideoAds addTarget:self action:@selector(toggleEnableNoVideoAds:) forControlEvents:UIControlEventValueChanged];
+-            enableNoVideoAds.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableNoVideoAds"];
+-            cell.accessoryView = enableNoVideoAds;
+-        }
+-        if(indexPath.row == 1) {
+-            cell.textLabel.text = @"Enable Background Playback";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *enableBackgroundPlayback = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [enableBackgroundPlayback addTarget:self action:@selector(toggleEnableBackgroundPlayback:) forControlEvents:UIControlEventValueChanged];
+-            enableBackgroundPlayback.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableBackgroundPlayback"];
+-            cell.accessoryView = enableBackgroundPlayback;
+-        }
+-        if(indexPath.row == 2) {
+-            cell.textLabel.text = @"Allow HD On Cellular Data";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *allowHDOnCellularData = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [allowHDOnCellularData addTarget:self action:@selector(toggleAllowHDOnCellularData:) forControlEvents:UIControlEventValueChanged];
+-            allowHDOnCellularData.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAllowHDOnCellularData"];
+-            cell.accessoryView = allowHDOnCellularData;
+-        }
+-        if(indexPath.row == 3) {
+-            cell.textLabel.text = @"Auto Play In FullScreen";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *autoFullScreen = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [autoFullScreen addTarget:self action:@selector(toggleAutoFullScreen:) forControlEvents:UIControlEventValueChanged];
+-            autoFullScreen.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAutoFullScreen"];
+-            cell.accessoryView = autoFullScreen;
+-        }
+-        if(indexPath.row == 4) {
+-            cell.textLabel.text = @"Disable Video Endscreen Popups";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *disableVideoEndscreenPopups = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [disableVideoEndscreenPopups addTarget:self action:@selector(toggleDisableVideoEndscreenPopups:) forControlEvents:UIControlEventValueChanged];
+-            disableVideoEndscreenPopups.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoEndscreenPopups"];
+-            cell.accessoryView = disableVideoEndscreenPopups;
+-        }
+-        if(indexPath.row == 5) {
+-            cell.textLabel.text = @"Disable Video Info Cards";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *disableVideoInfoCards = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [disableVideoInfoCards addTarget:self action:@selector(toggleDisableVideoInfoCards:) forControlEvents:UIControlEventValueChanged];
+-            disableVideoInfoCards.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoInfoCards"];
+-            cell.accessoryView = disableVideoInfoCards;
+-        }
+-        if(indexPath.row == 6) {
+-            cell.textLabel.text = @"Disable Video AutoPlay";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *disableVideoAutoPlay = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [disableVideoAutoPlay addTarget:self action:@selector(toggleDisableVideoAutoPlay:) forControlEvents:UIControlEventValueChanged];
+-            disableVideoAutoPlay.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoAutoPlay"];
+-            cell.accessoryView = disableVideoAutoPlay;
+-        }
+-        if(indexPath.row == 7) {
+-            cell.textLabel.text = @"Disable Double Tap To Skip";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *disableDoubleTapToSkip = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [disableDoubleTapToSkip addTarget:self action:@selector(toggleDisableDoubleTapToSkip:) forControlEvents:UIControlEventValueChanged];
+-            disableDoubleTapToSkip.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableDoubleTapToSkip"];
+-            cell.accessoryView = disableDoubleTapToSkip;
+-        }
+-        if(indexPath.row == 8) {
+-            cell.textLabel.text = @"Hide Channel Watermark";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *hideChannelWatermark = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [hideChannelWatermark addTarget:self action:@selector(toggleHideChannelWatermark:) forControlEvents:UIControlEventValueChanged];
+-            hideChannelWatermark.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kHideChannelWatermark"];
+-            cell.accessoryView = hideChannelWatermark;
+-        }
+-        if(indexPath.row == 9) {
+-            cell.textLabel.text = @"Always Show Player Bar";
+-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+-            UISwitch *alwaysShowPlayerBar = [[UISwitch alloc] initWithFrame:CGRectZero];
+-            [alwaysShowPlayerBar addTarget:self action:@selector(toggleAlwaysShowPlayerBar:) forControlEvents:UIControlEventValueChanged];
+-            alwaysShowPlayerBar.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"];
+-            cell.accessoryView = alwaysShowPlayerBar;
++        if (indexPath.section == 0) {
++            if(indexPath.row == 0) {
++                cell.textLabel.text = @"Enable No Ads (Video/HomeScreen)";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *enableNoVideoAds = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [enableNoVideoAds addTarget:self action:@selector(toggleEnableNoVideoAds:) forControlEvents:UIControlEventValueChanged];
++                enableNoVideoAds.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableNoVideoAds"];
++                cell.accessoryView = enableNoVideoAds;
++            }
++            if(indexPath.row == 1) {
++                cell.textLabel.text = @"Enable Background Playback";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *enableBackgroundPlayback = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [enableBackgroundPlayback addTarget:self action:@selector(toggleEnableBackgroundPlayback:) forControlEvents:UIControlEventValueChanged];
++                enableBackgroundPlayback.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableBackgroundPlayback"];
++                cell.accessoryView = enableBackgroundPlayback;
++            }
++            if(indexPath.row == 2) {
++                cell.textLabel.text = @"Allow HD On Cellular Data";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *allowHDOnCellularData = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [allowHDOnCellularData addTarget:self action:@selector(toggleAllowHDOnCellularData:) forControlEvents:UIControlEventValueChanged];
++                allowHDOnCellularData.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAllowHDOnCellularData"];
++                cell.accessoryView = allowHDOnCellularData;
++            }
++            if(indexPath.row == 3) {
++                cell.textLabel.text = @"Auto Play In FullScreen";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *autoFullScreen = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [autoFullScreen addTarget:self action:@selector(toggleAutoFullScreen:) forControlEvents:UIControlEventValueChanged];
++                autoFullScreen.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAutoFullScreen"];
++                cell.accessoryView = autoFullScreen;
++            }
++            if(indexPath.row == 4) {
++                cell.textLabel.text = @"Disable Video Endscreen Popups";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *disableVideoEndscreenPopups = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [disableVideoEndscreenPopups addTarget:self action:@selector(toggleDisableVideoEndscreenPopups:) forControlEvents:UIControlEventValueChanged];
++                disableVideoEndscreenPopups.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoEndscreenPopups"];
++                cell.accessoryView = disableVideoEndscreenPopups;
++            }
++            if(indexPath.row == 5) {
++                cell.textLabel.text = @"Disable Video Info Cards";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *disableVideoInfoCards = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [disableVideoInfoCards addTarget:self action:@selector(toggleDisableVideoInfoCards:) forControlEvents:UIControlEventValueChanged];
++                disableVideoInfoCards.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoInfoCards"];
++                cell.accessoryView = disableVideoInfoCards;
++            }
++            if(indexPath.row == 6) {
++                cell.textLabel.text = @"Disable Video AutoPlay";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *disableVideoAutoPlay = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [disableVideoAutoPlay addTarget:self action:@selector(toggleDisableVideoAutoPlay:) forControlEvents:UIControlEventValueChanged];
++                disableVideoAutoPlay.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableVideoAutoPlay"];
++                cell.accessoryView = disableVideoAutoPlay;
++            }
++            if(indexPath.row == 7) {
++                cell.textLabel.text = @"Disable Double Tap To Skip";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *disableDoubleTapToSkip = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [disableDoubleTapToSkip addTarget:self action:@selector(toggleDisableDoubleTapToSkip:) forControlEvents:UIControlEventValueChanged];
++                disableDoubleTapToSkip.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableDoubleTapToSkip"];
++                cell.accessoryView = disableDoubleTapToSkip;
++            }
++            if(indexPath.row == 8) {
++                cell.textLabel.text = @"Hide Channel Watermark";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *hideChannelWatermark = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [hideChannelWatermark addTarget:self action:@selector(toggleHideChannelWatermark:) forControlEvents:UIControlEventValueChanged];
++                hideChannelWatermark.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kHideChannelWatermark"];
++                cell.accessoryView = hideChannelWatermark;
++            }
++            if(indexPath.row == 9) {
++                cell.textLabel.text = @"Always Show Player Bar";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *alwaysShowPlayerBar = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [alwaysShowPlayerBar addTarget:self action:@selector(toggleAlwaysShowPlayerBar:) forControlEvents:UIControlEventValueChanged];
++                alwaysShowPlayerBar.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"];
++                cell.accessoryView = alwaysShowPlayerBar;
++            }
++        }
++        else if (indexPath.section == 1) {
++            if (indexPath.row == 0) {
++                cell.textLabel.text = @"Show When Video Ends";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *showWhenVideoEnds = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [showWhenVideoEnds addTarget:self action:@selector(toggleShowWhenVideoEnds:) forControlEvents:UIControlEventValueChanged];
++                showWhenVideoEnds.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kShowWhenVideoEnds"];
++                cell.accessoryView = showWhenVideoEnds;
++            }
++            if (indexPath.row == 1) {
++                cell.textLabel.text = @"Show Seconds";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *showSeconds = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [showSeconds addTarget:self action:@selector(toggleShowSeconds:) forControlEvents:UIControlEventValueChanged];
++                showSeconds.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kShowSeconds"];
++                cell.accessoryView = showSeconds;
++            }
++            if (indexPath.row == 2) {
++                cell.textLabel.text = @"Use 24 Hour Clock";
++                cell.selectionStyle = UITableViewCellSelectionStyleNone;
++                UISwitch *use24HourClock = [[UISwitch alloc] initWithFrame:CGRectZero];
++                [use24HourClock addTarget:self action:@selector(toggleUse24HourClock:) forControlEvents:UIControlEventValueChanged];
++                use24HourClock.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kUse24HourClock"];
++                cell.accessoryView = use24HourClock;
++            }
+         }
+     }
+     return cell;
+@@ -253,4 +287,35 @@
+     }
+ }
+ 
+-@end
+\ No newline at end of file
++- (void)toggleShowWhenVideoEnds:(UISwitch *)sender {
++    if ([sender isOn]) {
++        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kShowWhenVideoEnds"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    } else {
++        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kShowWhenVideoEnds"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    }
++}
++
++- (void)toggleShowSeconds:(UISwitch *)sender {
++    if ([sender isOn]) {
++        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kShowSeconds"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    } else {
++        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kShowSeconds"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    }
++}
++
++- (void)toggleUse24HourClock:(UISwitch *)sender {
++    if ([sender isOn]) {
++        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kUse24HourClock"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    } else {
++        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kUse24HourClock"];
++        [[NSUserDefaults standardUserDefaults] synchronize];
++    }
++}
++
++
++@end
+diff -urN Youtube-Reborn+NoPiP/Tweak.xm Youtube-Reborn+YTETA/Tweak.xm
+--- Youtube-Reborn+NoPiP/Tweak.xm	2022-03-15 16:19:29.256495766 +0700
++++ Youtube-Reborn+YTETA/Tweak.xm	2022-03-15 16:17:19.503420401 +0700
+@@ -1630,6 +1630,47 @@
+ }
+ %end
+ 
++%group gYTETA
++%hook YTPlayerViewController
++-(void)singleVideo:(id)arg1 currentVideoTimeDidChange:(id)arg2 {
++	%orig;
++
++	// Fixes crash with auto-playing videos on the home page
++	if ([self.view.overlayView class] != %c(YTMainAppVideoPlayerOverlayView)) return;
++
++	// Get remaining seconds
++	float remainingSeconds = self.view.overlayView.playerBar.playerBar.totalTime - self.view.overlayView.playerBar.playerBar.mediaTime;
++
++	// Get time label
++	UILabel *progressLabel = self.view.overlayView.playerBar.durationLabel;
++	// Modify label
++	if (![progressLabel.text containsString:@"Ends at"]) {
++        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
++        NSMutableString *formatString = [[NSMutableString alloc] initWithString:@"mm"];
++
++        // Add seconds, if they're enabled
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowSeconds"] == YES) [formatString appendString:@":ss"];
++
++        // Determine 12h/24h time
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kUse24HourClock"] == YES) [formatString insertString:@"HH:" atIndex:0];
++        else [formatString insertString:@"hh:" atIndex:0];
++
++        // Make NSDateFormatter use our time format
++        [dateFormatter setDateFormat:formatString];
++
++        // Get time when video ends
++        NSString *endsAtString = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceNow:remainingSeconds/[self currentPlaybackRateForVarispeedSwitchController:nil]];
++
++        // Update the label's text
++        if (![progressLabel.text containsString:@"Ends at"]) [progressLabel setText:[NSString stringWithFormat:@"%@ - Ends at: %@", label.text, endsAtString]];
++
++        // Resize the label's frame so that the new text fits
++        [progressLabel sizeToFit];
++    }
++}
++%end
++%end
++
+ %ctor {
+     @autoreleasepool {
+         if ([[NSUserDefaults standardUserDefaults] objectForKey:@"kEnableNoVideoAds"] == nil) {
+@@ -1684,6 +1725,9 @@
+         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == YES or [[NSUserDefaults standardUserDefaults] boolForKey:@"kAlwaysShowPlayerBar"] == YES & [[NSUserDefaults standardUserDefaults] boolForKey:@"kDisableRelatedVideosInOverlay"] == NO) {
+             %init(gAlwaysShowPlayerBar);
+         }
++        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kShowWhenVideoEnds"] == YES) {
++            %init(gShowWhenVideoEnds);
++        }
+         NSData *colorData = [[NSUserDefaults standardUserDefaults] objectForKey:@"kYTRebornColourOptionsVTwo"];
+         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingFromData:colorData error:nil];
+         [unarchiver setRequiresSecureCoding:NO];
