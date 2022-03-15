@@ -65,11 +65,11 @@ $(TWEAK_NAME)_FILES = Tweak.xm
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc
 $(TWEAK_NAME)_FRAMEWORKS = UIKit Foundation
 $(TWEAK_NAME)_IPA ?= /path/to/ipa  # Change the path to your decrypted YouTube IPA file here.
-$(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib .theos/obj/YoutubeSpeed.dylib
+$(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib .theos/obj/YoutubeSpeed.dylib .theos/obj/YTETA.dylib
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
-SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Youtube-Reborn Tweaks/Return-Youtube-Dislikes Tweaks/YTSpeed
+SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Return-Youtube-Dislikes Tweaks/YTSpeed Tweaks/YTETA Tweaks/Youtube-Reborn 
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
