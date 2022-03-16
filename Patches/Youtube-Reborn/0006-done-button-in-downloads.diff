@@ -1,29 +1,3 @@
-diff -urN Youtube-Reborn/Controllers/DownloadsAudioController.h Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsAudioController.h
---- Youtube-Reborn/Controllers/DownloadsAudioController.h	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsAudioController.h	2022-03-16 17:50:53.839814724 +0700
-@@ -5,5 +5,6 @@
- @interface DownloadsAudioController : UITableViewController <AVPlayerViewControllerDelegate>
- 
- - (void)setupLightDarkModeAudioView;
-+- (void)done;
- 
--@end
-\ No newline at end of file
-+@end
-diff -urN Youtube-Reborn/Controllers/DownloadsAudioController.m Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsAudioController.m
---- Youtube-Reborn/Controllers/DownloadsAudioController.m	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsAudioController.m	2022-03-16 17:51:59.048639335 +0700
-@@ -114,4 +114,8 @@
-     }
- }
- 
--@end
-\ No newline at end of file
-+- (void)done {
-+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-+}
-+
-+@end
 diff -urN Youtube-Reborn/Controllers/DownloadsController.h Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsController.h
 --- Youtube-Reborn/Controllers/DownloadsController.h	2022-03-02 09:27:53.000000000 +0700
 +++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsController.h	2022-03-16 10:35:45.530590424 +0700
@@ -37,7 +11,7 @@ diff -urN Youtube-Reborn/Controllers/DownloadsController.h Youtube-Reborn+DoneBu
 diff -urN Youtube-Reborn/Controllers/DownloadsController.m Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsController.m
 --- Youtube-Reborn/Controllers/DownloadsController.m	2022-03-02 09:27:53.000000000 +0700
 +++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsController.m	2022-03-16 17:48:22.027855605 +0700
-@@ -9,20 +9,38 @@
+@@ -9,21 +9,39 @@
  @end
  
  @implementation DownloadsController
@@ -86,30 +60,4 @@ diff -urN Youtube-Reborn/Controllers/DownloadsController.m Youtube-Reborn+DoneBu
  
 -@end
 \ No newline at end of file
-+@end
-diff -urN Youtube-Reborn/Controllers/DownloadsVideoController.h Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsVideoController.h
---- Youtube-Reborn/Controllers/DownloadsVideoController.h	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsVideoController.h	2022-03-16 17:50:47.234215422 +0700
-@@ -5,5 +5,6 @@
- @interface DownloadsVideoController : UITableViewController <AVPlayerViewControllerDelegate>
- 
- - (void)setupLightDarkModeVideoView;
-+- (void)done;
- 
--@end
-\ No newline at end of file
-+@end
-diff -urN Youtube-Reborn/Controllers/DownloadsVideoController.m Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsVideoController.m
---- Youtube-Reborn/Controllers/DownloadsVideoController.m	2022-03-02 09:27:53.000000000 +0700
-+++ Youtube-Reborn+DoneButtonInDownloadController/Controllers/DownloadsVideoController.m	2022-03-16 17:51:50.515539110 +0700
-@@ -114,4 +114,8 @@
-     }
- }
- 
--@end
-\ No newline at end of file
-+- (void)done {
-+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-+}
-+
 +@end
