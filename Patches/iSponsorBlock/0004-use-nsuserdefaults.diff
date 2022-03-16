@@ -26,7 +26,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 -    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 -    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:settingsPath]];
 -    NSDictionary *categorySettings = [settings objectForKey:@"categorySettings"];
-+    NSDictionary *categorySettings = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"];
++    NSDictionary *categorySettings = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"] mutableCopy];
      
      [categorySettings setValue:hexString forKey:[NSString stringWithFormat:@"%@Color", self.category]];
 -    [settings setValue:categorySettings forKey:@"categorySettings"];
