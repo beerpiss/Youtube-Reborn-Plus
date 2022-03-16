@@ -26,7 +26,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 -    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 -    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:settingsPath]];
 -    NSDictionary *categorySettings = [settings objectForKey:@"categorySettings"];
-+    NSDictionary *categorySettings = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"] ;
++    NSDictionary *categorySettings = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"];
      
      [categorySettings setValue:hexString forKey:[NSString stringWithFormat:@"%@Color", self.category]];
 -    [settings setValue:categorySettings forKey:@"categorySettings"];
@@ -129,7 +129,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
  
  -(void)categorySegmentSelected:(UISegmentedControl *)segmentedControl {
 -    NSMutableDictionary *categorySettings = [self.settings valueForKey:@"categorySettings"];
-+    NSMutableDictionary *categorySettings = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"];
++    NSMutableDictionary *categorySettings = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"] mutableCopy];
      [categorySettings setValue:@(segmentedControl.selectedSegmentIndex) forKey:[(SponsorBlockTableCell *)segmentedControl.superview.superview category]];
  
 -    [self.settings setValue:categorySettings forKey:@"categorySettings"];
@@ -355,8 +355,8 @@ diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+useNSUserDefaults/iSponso
 +    kSkipNoticeDuration = [[NSUserDefaults standardUserDefaults] floatForKey:@"kSponsorBlockSkipNoticeDuration"]
 +                            ? [[NSUserDefaults standardUserDefaults] floatForKey:@"kSponsorBlockSkipNoticeDuration"]
 +                            : 3.0f;
-+    kWhitelistedChannels [[NSUserDefaults standardUserDefaults] arrayForKey:@"kSponsorBlockWhitelistedChannels"]
-+                            ? [(NSArray *)[[NSUserDefaults standardUserDefaults] arrayForKey:@"kSponsorBlockWhitelistedChannels"] mutableCopy]
++    kWhitelistedChannels = [[NSUserDefaults standardUserDefaults] arrayForKey:@"kSponsorBlockWhitelistedChannels"]
++                            ? [[[NSUserDefaults standardUserDefaults] arrayForKey:@"kSponsorBlockWhitelistedChannels"] mutableCopy]
 +                            : [NSMutableArray array];
 +    [[NSUserDefaults standardUserDefaults] setBool:kIsEnabled forKey:@"kSponsorBlockEnabled"];
 +    [[NSUserDefaults standardUserDefaults] setObject:kUserID forKey:@"kSponsorBlockUserID"];
