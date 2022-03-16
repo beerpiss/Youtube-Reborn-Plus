@@ -112,7 +112,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
  -(void)enabledSwitchToggled:(UISwitch *)sender {
 -    [self.settings setValue:@(sender.on) forKey:@"enabled"];
 -    [self writeSettings:self.settings];
-+    [[NSUserDefaults standardUserDefaults] setBool:@(sender.on) forKey:@"kSponsorBlockEnabled"];
++    [[NSUserDefaults standardUserDefaults] setBool:[sender isOn] forKey:@"kSponsorBlockEnabled"];
 +    [[NSUserDefaults standardUserDefaults] synchronize];
  }
  
@@ -123,7 +123,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
      NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 -    [self.settings setValue:@(sender.on) forKey:titlesNames[indexPath.section-9]];
 -    [self writeSettings:self.settings];
-+    [[NSUserDefaults standardUserDefaults] setBool:@(sender.on) forKey:titlesNames[indexPath.section-9]];
++    [[NSUserDefaults standardUserDefaults] setBool:[sender isOn] forKey:titlesNames[indexPath.section-9]];
 +    [[NSUserDefaults standardUserDefaults] synchronize];
  }
  
@@ -145,13 +145,13 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
      if([cell.textLabel.text isEqualToString:@"Set Minimum Segment Duration:"]) {
 -        [self.settings setValue:[f numberFromString:textField.text] forKey:@"minimumDuration"];
 -        [self writeSettings:self.settings];
-+        [[NSUserDefaults standardUserDefaults] setFloat:[f numberFromString:textField.text] forKey:@"kSponsorBlockMinimumDuration"];
++        [[NSUserDefaults standardUserDefaults] setFloat:[f numberFromString:textField.text].floatValue forKey:@"kSponsorBlockMinimumDuration"];
 +        [[NSUserDefaults standardUserDefaults] synchronize];
      }
      else {
 -        [self.settings setValue:[f numberFromString:textField.text] forKey:@"skipNoticeDuration"];
 -        [self writeSettings:self.settings];
-+        [[NSUserDefaults standardUserDefaults] setFloat:[f numberFromString:textField.text] forKey:@"kSponsorBlockSkipNoticeDuration"];
++        [[NSUserDefaults standardUserDefaults] setFloat:[f numberFromString:textField.text].floatValue forKey:@"kSponsorBlockSkipNoticeDuration"];
 +        [[NSUserDefaults standardUserDefaults] synchronize];
      }
  }
