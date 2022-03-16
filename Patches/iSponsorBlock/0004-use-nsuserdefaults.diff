@@ -14,7 +14,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.h iSponsorBlock+useNSUser
  @end
 diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m
 --- iSponsorBlock/SponsorBlockSettingsController.m	2022-03-16 21:16:54.747970082 +0700
-+++ iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m	2022-03-16 21:57:41.895162913 +0700
++++ iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m	2022-03-17 06:31:09.083898941 +0700
 @@ -5,17 +5,11 @@
  -(void)colorPicker:(id)colorPicker didSelectColor:(UIColor *)color {
      self.colorWell.color = color;
@@ -26,7 +26,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 -    NSMutableDictionary *settings = [NSMutableDictionary dictionary];
 -    [settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:settingsPath]];
 -    NSDictionary *categorySettings = [settings objectForKey:@"categorySettings"];
-+    NSDictionary *categorySettings = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"] mutableCopy];
++    NSMutableDictionary *categorySettings = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"kSponsorBlockCategorySettings"] mutableCopy];
      
      [categorySettings setValue:hexString forKey:[NSString stringWithFormat:@"%@Color", self.category]];
 -    [settings setValue:categorySettings forKey:@"categorySettings"];
@@ -78,7 +78,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
          [textCell editableTextField].keyboardType = UIKeyboardTypeDecimalPad;
          [textCell editableTextField].delegate = self;
          return textCell;
-@@ -197,14 +185,14 @@
+@@ -197,23 +185,23 @@
          UITableViewCell *textCell = [[UITableViewCell alloc] initWithStyle:1000 reuseIdentifier:@"SponsorBlockTextCell"];
          textCell.textLabel.text = @"Set How Long Skip Notice Will Appear:";
          textCell.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -93,16 +93,17 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 -        NSArray *titlesNames = @[@"showSkipNotice", @"showButtonsInPlayer", @"showModifiedTime", @"enableSkipCountTracking"];
 +        NSArray *titlesNames = @[@"kSponsorBlockShowSkipNotice", @"kSponsorBlockShowButtonsInPlayer", @"kSponsorBlockShowModifiedTime", @"kSponsorBlockEnableSkipCountTracking"];
          UITableViewCell *tableCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SponsorBlockCell3"];
-         tableCell.textLabel.text = titles[indexPath.section-9];
+-        tableCell.textLabel.text = titles[indexPath.section-9];
++        tableCell.textLabel.text = titles[indexPath.section-9 % 4];
          tableCell.textLabel.adjustsFontSizeToFitWidth = YES;
-@@ -212,8 +200,8 @@
+ 
          UISwitch *toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0,0,51,31)];
          tableCell.accessoryView = toggleSwitch;
          [toggleSwitch addTarget:self action:@selector(switchToggled:) forControlEvents:UIControlEventValueChanged];
 -        if([self.settings valueForKey:titlesNames[indexPath.section-9]]) {
 -            [toggleSwitch setOn:[[self.settings valueForKey:titlesNames[indexPath.section-9]] boolValue] animated:NO];
-+        if([[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9]]) {
-+            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9]] animated:NO];
++        if([[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9 % 4]]) {
++            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9 % 4]] animated:NO];
          }
          else {
              [toggleSwitch setOn:YES animated:NO];
@@ -265,7 +266,7 @@ diff -urN iSponsorBlock/SponsorBlockViewController.m iSponsorBlock+useNSUserDefa
              UIMenu *categoriesMenu = [UIMenu menuWithTitle:@"Vote to Change Cateogory" image:[UIImage systemImageNamed:@"square.grid.2x2"] identifier:nil options:0 children:categoryActions];
 diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm
 --- iSponsorBlock/iSponsorBlock.xm	2022-03-16 21:16:54.796059273 +0700
-+++ iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm	2022-03-16 21:38:53.686542301 +0700
++++ iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm	2022-03-17 05:48:56.828608609 +0700
 @@ -760,51 +760,60 @@
  %end
  
