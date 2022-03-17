@@ -19,3 +19,6 @@
 [submodule "Tweaks/YTSpeed"]
 	path = Tweaks/YTSpeed
 	url = https://github.com/Lyvendia/YTSpeed
+[submodule "Tweaks/Youtube-Reborn"]
+	path = Tweaks/Youtube-Reborn
+	url = https://github.com/beerpiss/Youtube-Reborn
