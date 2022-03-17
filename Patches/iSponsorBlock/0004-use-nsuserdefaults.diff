@@ -1,20 +1,6 @@
-diff -urN iSponsorBlock/SponsorBlockSettingsController.h iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.h
---- iSponsorBlock/SponsorBlockSettingsController.h	2022-03-16 22:00:13.749256501 +0700
-+++ iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.h	2022-03-16 21:17:14.620862403 +0700
-@@ -42,10 +42,7 @@
- @interface SponsorBlockSettingsController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
- @property (strong, nonatomic) UITableView *tableView;
- @property (strong, nonatomic) NSArray *sectionTitles;
--@property (strong, nonatomic) NSMutableDictionary *settings;
--@property (strong, nonatomic) NSString *settingsPath;
- -(void)enabledSwitchToggled:(UISwitch *)sender;
- -(void)switchToggled:(UISwitch *)sender;
- -(void)categorySegmentSelected:(UISegmentedControl *)segmentedControl;
---(void)writeSettings:(NSDictionary *)settings;
- @end
 diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m
---- iSponsorBlock/SponsorBlockSettingsController.m	2022-03-16 21:16:54.747970082 +0700
-+++ iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m	2022-03-17 06:31:09.083898941 +0700
+--- iSponsorBlock/SponsorBlockSettingsController.m	2022-03-17 09:57:59.895957277 +0700
++++ iSponsorBlock+useNSUserDefaults/SponsorBlockSettingsController.m	2022-03-17 09:50:34.222066929 +0700
 @@ -5,17 +5,11 @@
  -(void)colorPicker:(id)colorPicker didSelectColor:(UIColor *)color {
      self.colorWell.color = color;
@@ -49,6 +35,22 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
      self.view.backgroundColor = UIColor.systemBackgroundColor;
      
      //detects if device is an se gen 1 or not, crude fix for text getting cut off
+@@ -95,13 +83,13 @@
+     self.sectionTitles = @[@"Sponsor", @"Intermission/Intro Animation", @"Endcards/Credits", @"Interaction Reminder (Subscribe)", @"Unpaid/Self Promotion", @"Music: Non-Music Section"];
+ }
+ - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+-    return 14;
++    return 13;
+ }
+ 
+ - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+     if(section == 0) return 1;
+     else if(section <= 6 || section == 13) return 2;
+-    return 1;
++    return 0;
+ }
+ 
+ - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 @@ -114,8 +102,8 @@
          UISwitch *enabledSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0,0,51,31)];
          cell.accessoryView = enabledSwitch;
@@ -107,9 +109,41 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
          }
          else {
              [toggleSwitch setOn:YES animated:NO];
-@@ -260,24 +248,24 @@
+@@ -221,13 +209,6 @@
+         }
+         return tableCell;
+     }
+-    else if(indexPath.section == 13) {
+-        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SponsorBlockDonationCell"];
+-        if(indexPath.row == 0) cell.textLabel.text = @"Donate on Venmo!";
+-        else cell.textLabel.text = @"Donate on PayPal!";
+-        cell.imageView.image = [UIImage systemImageNamed:@"dollarsign.circle.fill"];
+-        return cell;
+-    }
+     return nil;
  }
  
+@@ -242,42 +223,25 @@
+     return nil;
+ }
+ 
+--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-    if(indexPath.section == 13) {
+-        if(indexPath.row == 0) {
+-            if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"venmo://"]]) {
+-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"venmo://venmo.com/code?user_id=3178620965093376215"] options:@{} completionHandler:nil];
+-            }
+-            else {
+-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://venmo.com/code?user_id=3178620965093376215"] options:@{} completionHandler:nil];
+-            }
+-
+-        }
+-        else {
+-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://paypal.me/DBrett684"] options:@{} completionHandler:nil];
+-        }
+-    }
+-}
+-
  -(void)enabledSwitchToggled:(UISwitch *)sender {
 -    [self.settings setValue:@(sender.on) forKey:@"enabled"];
 -    [self writeSettings:self.settings];
@@ -140,7 +174,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
  }
  
  -(void)textFieldDidEndEditing:(UITextField *)textField {
-@@ -285,17 +273,12 @@
+@@ -285,17 +249,12 @@
      NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
      f.numberStyle = NSNumberFormatterDecimalStyle;
      if([cell.textLabel.text isEqualToString:@"Set Minimum Segment Duration:"]) {
@@ -163,7 +197,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 -}
  @end
 diff -urN iSponsorBlock/SponsorBlockViewController.m iSponsorBlock+useNSUserDefaults/SponsorBlockViewController.m
---- iSponsorBlock/SponsorBlockViewController.m	2022-03-10 19:02:14.734173788 +0700
+--- iSponsorBlock/SponsorBlockViewController.m	2022-03-17 09:57:50.885599983 +0700
 +++ iSponsorBlock+useNSUserDefaults/SponsorBlockViewController.m	2022-03-16 21:44:49.297545968 +0700
 @@ -183,14 +183,8 @@
      else {
@@ -265,8 +299,8 @@ diff -urN iSponsorBlock/SponsorBlockViewController.m iSponsorBlock+useNSUserDefa
              
              UIMenu *categoriesMenu = [UIMenu menuWithTitle:@"Vote to Change Cateogory" image:[UIImage systemImageNamed:@"square.grid.2x2"] identifier:nil options:0 children:categoryActions];
 diff -urN iSponsorBlock/iSponsorBlock.xm iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm
---- iSponsorBlock/iSponsorBlock.xm	2022-03-16 21:16:54.796059273 +0700
-+++ iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm	2022-03-17 05:48:56.828608609 +0700
+--- iSponsorBlock/iSponsorBlock.xm	2022-03-17 09:57:59.912103947 +0700
++++ iSponsorBlock+useNSUserDefaults/iSponsorBlock.xm	2022-03-17 06:34:10.439341415 +0700
 @@ -760,51 +760,60 @@
  %end
  
