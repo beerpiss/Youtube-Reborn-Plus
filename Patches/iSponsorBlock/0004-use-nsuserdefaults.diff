@@ -94,7 +94,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
 +        NSArray *titlesNames = @[@"kSponsorBlockShowSkipNotice", @"kSponsorBlockShowButtonsInPlayer", @"kSponsorBlockShowModifiedTime", @"kSponsorBlockEnableSkipCountTracking"];
          UITableViewCell *tableCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SponsorBlockCell3"];
 -        tableCell.textLabel.text = titles[indexPath.section-9];
-+        tableCell.textLabel.text = titles[indexPath.section-9 % 4];
++        tableCell.textLabel.text = titles[(indexPath.section-9) % 4];
          tableCell.textLabel.adjustsFontSizeToFitWidth = YES;
  
          UISwitch *toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0,0,51,31)];
@@ -102,8 +102,8 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
          [toggleSwitch addTarget:self action:@selector(switchToggled:) forControlEvents:UIControlEventValueChanged];
 -        if([self.settings valueForKey:titlesNames[indexPath.section-9]]) {
 -            [toggleSwitch setOn:[[self.settings valueForKey:titlesNames[indexPath.section-9]] boolValue] animated:NO];
-+        if([[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9 % 4]]) {
-+            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[indexPath.section-9 % 4]] animated:NO];
++        if([[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[(indexPath.section-9) % 4]]) {
++            [toggleSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:titlesNames[(indexPath.section-9) % 4]] animated:NO];
          }
          else {
              [toggleSwitch setOn:YES animated:NO];
@@ -124,7 +124,7 @@ diff -urN iSponsorBlock/SponsorBlockSettingsController.m iSponsorBlock+useNSUser
      NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
 -    [self.settings setValue:@(sender.on) forKey:titlesNames[indexPath.section-9]];
 -    [self writeSettings:self.settings];
-+    [[NSUserDefaults standardUserDefaults] setBool:[sender isOn] forKey:titlesNames[indexPath.section-9]];
++    [[NSUserDefaults standardUserDefaults] setBool:[sender isOn] forKey:titlesNames[(indexPath.section-9) % 4]];
 +    [[NSUserDefaults standardUserDefaults] synchronize];
  }
  
