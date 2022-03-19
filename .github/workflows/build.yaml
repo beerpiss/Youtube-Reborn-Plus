@@ -28,7 +28,6 @@ jobs:
         name: Installing build dependencies
         run: |
           curl -L https://raw.githubusercontent.com/Muirey03/RemoteLog/master/RemoteLog.h -o $THEOS/include/RemoteLog.h
-          sudo apt-get install -y ffmpeg yt-dlp
           python3 -m ensurepip
           python3 -m pip install -U gdown
       - 
