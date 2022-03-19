@@ -59,6 +59,35 @@ DISPLAY_NAME ?= YouTube Reborn
 BUNDLE_ID ?= com.google.ios.youtube
 CODESIGN_IPA ?= 0
 
+include $(THEOS)/makefiles/common.mk
+_GIT_IS_INSIDE_WORK_TREE := $(shell git rev-parse --is-inside-work-tree)
+_GIT_TAG_NAME := $(shell git name-rev --name-only --tags HEAD)
+before-all::
+# Git-based versioning
+# If not a git repo (downloaded tarball etc.), use version from control file
+# If git repo:
+# - If on tag, use version from control file
+# - If not on tag, use version from control file with added git manfest
+#	- Release version is $(PACKAGE_VERSION)+git$(GIT_DATE).$(GIT_COMMIT_HASH)
+#	- Debug version is $(PACKAGE_VERSION)-debug.$(_DEBUG_NUMBER)+git$(GIT_DATE).$(GIT_COMMIT_HASH)
+# $(_DEBUG_NUMBER) is incremental.
+ifeq ($(_GIT_IS_INSIDE_WORK_TREE),true)
+ifeq ($(_GIT_TAG_NAME),undefined)
+	$(eval _PACKAGE_NAME := YoutubeRebornPlus)
+	$(eval _PACKAGE_VERSION := 1.0.0)
+	$(eval _GIT_DATE := $(shell git show -s --format=%cs | tr -d "-"))
+	$(eval _GIT_COMMIT_HASH := $(shell git rev-parse --short HEAD))
+	$(eval THEOS_PACKAGE_BASE_VERSION := $(_PACKAGE_VERSION)+git$(_GIT_DATE).$(_GIT_COMMIT_HASH))
+ifeq ($(call __theos_bool,$(or $(debug),$(DEBUG))),$(_THEOS_TRUE))
+	$(eval _DEBUG_NUMBER := $(shell THEOS_PROJECT_DIR=$(THEOS_PROJECT_DIR) $(THEOS_BIN_PATH)/package_version.sh -N "" -V ""))
+	$(eval _THEOS_INTERNAL_PACKAGE_VERSION := $(_PACKAGE_VERSION)-debug.$(_DEBUG_NUMBER)+git$(_GIT_DATE).$(_GIT_COMMIT_HASH))
+else
+	$(eval _THEOS_INTERNAL_PACKAGE_VERSION := $(THEOS_PACKAGE_BASE_VERSION))
+endif
+	$(eval OUTPUT_NAME := $(TWEAK_NAME)$(_THEOS_INTERNAL_PACKAGE_VERSION).ipa)
+endif
+endif
+
 $(TWEAK_NAME)_USE_FLEX = 0
 $(TWEAK_NAME)_FILES = Tweak.xm
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc
@@ -71,7 +100,6 @@ $(TWEAK_NAME)_INJECT_DYLIBS = $(THEOS_OBJ_DIR)/libcolorpicker.dylib \
 	$(THEOS_OBJ_DIR)/YouTubeDislikesReturn.dylib \
 	$(THEOS_OBJ_DIR)/YoutubeSpeed.dylib
 
-include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += Tweaks/Alderis Tweaks/iSponsorBlock Tweaks/YouPiP Tweaks/Return-Youtube-Dislikes Tweaks/YTSpeed Tweaks/Youtube-Reborn 
 include $(THEOS_MAKE_PATH)/aggregate.mk
