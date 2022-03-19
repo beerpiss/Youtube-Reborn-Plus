@@ -53,19 +53,29 @@ export TARGET := iphone:clang:14.5:14.0
 export ARCHS = arm64 arm64e
 export GO_EASY_ON_ME = 1
 export SIDELOADED = 1
-export FINALPACKAGE ?= 1
 
 TWEAK_NAME = YoutubeRebornPlus
 DISPLAY_NAME ?= YouTube Reborn
 BUNDLE_ID ?= com.google.ios.youtube
-CODESIGN_IPA ?= 0
+CODESIGN_IPA ?= 
+
+ifeq ($(DEBUG),1)
+THEOS_DYLIB_PATH := .theos/obj/debug
+else
+THEOS_DYLIB_PATH := .theos/obj
+endif
 
 $(TWEAK_NAME)_USE_FLEX = 0
 $(TWEAK_NAME)_FILES = Tweak.xm
 $(TWEAK_NAME)_CFLAGS = -fobjc-arc
 $(TWEAK_NAME)_FRAMEWORKS = UIKit Foundation
-$(TWEAK_NAME)_IPA ?= /path/to/ipa  # Change the path to your decrypted YouTube IPA file here.
-$(TWEAK_NAME)_INJECT_DYLIBS = .theos/obj/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib .theos/obj/YouPiP.dylib .theos/obj/YouTubeReborn.dylib .theos/obj/YouTubeDislikesReturn.dylib .theos/obj/YoutubeSpeed.dylib
+$(TWEAK_NAME)_IPA ?= /path/to/ipa  # Change the path to your decrypted YouTube IPA file here, or specify it with an env variable
+$(TWEAK_NAME)_INJECT_DYLIBS = $(THEOS_DYLIB_PATH)/libcolorpicker.dylib \
+	$(THEOS_DYLIB_PATH)/iSponsorBlock.dylib \
+	$(THEOS_DYLIB_PATH)/YouPiP.dylib \
+	$(THEOS_DYLIB_PATH)/YouTubeReborn.dylib \
+	$(THEOS_DYLIB_PATH)/YouTubeDislikesReturn.dylib \
+	$(THEOS_DYLIB_PATH)/YoutubeSpeed.dylib
 
 include $(THEOS)/makefiles/common.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
@@ -74,13 +84,13 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
 	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mCopying resources bundles…\e[0m\n"
-	@mkdir -p Resources/Frameworks/Alderis.framework && find .theos/obj/install/Library/Frameworks/Alderis.framework -maxdepth 1 -type f -exec cp {} Resources/Frameworks/Alderis.framework/ \;
+	@mkdir -p Resources/Frameworks/Alderis.framework && find $(THEOS_DYLIB_PATH)/install/Library/Frameworks/Alderis.framework -maxdepth 1 -type f -exec cp {} Resources/Frameworks/Alderis.framework/ \;
 	@cp -R Tweaks/iSponsorBlock/layout/var/mobile/Library/Application\ Support/iSponsorBlock Resources/iSponsorBlock.bundle
 	@cp -R Tweaks/YouPiP/layout/Library/Application\ Support/YouPiP.bundle Resources/
 
 	@printf "$$(tput setaf 2)==>$$(tput sgr0) \e[1mChanging install name of dylibs…\e[0m\n"
-	@install_name_tool -change /usr/lib/libcolorpicker.dylib @rpath/libcolorpicker.dylib .theos/obj/iSponsorBlock.dylib
-	@install_name_tool -change /Library/Frameworks/Alderis.framework/Alderis @rpath/Alderis.framework/Alderis .theos/obj/libcolorpicker.dylib
+	@install_name_tool -change /usr/lib/libcolorpicker.dylib @rpath/libcolorpicker.dylib $(THEOS_DYLIB_PATH)/iSponsorBlock.dylib
+	@install_name_tool -change /Library/Frameworks/Alderis.framework/Alderis @rpath/Alderis.framework/Alderis $(THEOS_DYLIB_PATH)/libcolorpicker.dylib
 
 before-clean::
 	@printf "$$(tput setaf 6)==>$$(tput sgr0) \e[1mDeleting copied resources…\e[0m\n"
