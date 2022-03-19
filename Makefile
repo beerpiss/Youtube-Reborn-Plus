@@ -57,7 +57,7 @@ export SIDELOADED = 1
 TWEAK_NAME = YoutubeRebornPlus
 DISPLAY_NAME ?= YouTube Reborn
 BUNDLE_ID ?= com.google.ios.youtube
-CODESIGN_IPA ?= 
+CODESIGN_IPA ?= 0
 
 ifeq ($(DEBUG),1)
 THEOS_DYLIB_PATH := .theos/obj/debug
