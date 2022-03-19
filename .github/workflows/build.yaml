@@ -62,10 +62,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: RELEASE
-          path: out/YoutubeRebornPlus1.ipa
+          path: out/YoutubeRebornPlus1.0.0+git*.ipa
       - 
         name: Upload artifacts (debug)
         uses: actions/upload-artifact@v3
         with:
           name: DEBUG
-          path: out/YoutubeRebornPlus-*+debug.ipa
+          path: out/YoutubeRebornPlus1.0.0-debug.*+git*.ipa
