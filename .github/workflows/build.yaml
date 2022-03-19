@@ -50,13 +50,17 @@ jobs:
         run: |
           gmake clean 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
           gmake package FINALPACKAGE=1 YoutubeRebornPlus_IPA=$YOUTUBE_IPA_FULLPATH 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
-          mv packages/YoutubeRebornPlus1.ipa out/
+          mv packages/YoutubeRebornPlus1.0.0+git*.ipa out/
       - 
         name: Build (debug)
         run: |
           gmake clean 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
+
+          mkdir -p .theos/packages
+          echo $(( $GITHUB_RUN_NUMBER - 1 )) > .theos/packages/-
+          
           gmake package DEBUG=1 FINALPACKAGE=0 YoutubeRebornPlus_IPA=$YOUTUBE_IPA_FULLPATH 2>&1 | grep -Ev --line-buffered 'getcwd|descriptor'
-          mv packages/YoutubeRebornPlus-*+debug.ipa out/
+          mv packages/YoutubeRebornPlus1.0.0-debug.*+git*.ipa out/
       -
         name: Upload artifacts (release)
         uses: actions/upload-artifact@v3
